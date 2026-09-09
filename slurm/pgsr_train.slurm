@@ -39,7 +39,9 @@ conda activate "$ENV_PREFIX"
 "$ENV_PREFIX/bin/python" -c "import diff_plane_rasterization" || {
     echo "plane rasterizer missing — run slurm/pgsr_build_ext.slurm first" >&2; exit 1; }
 
-[[ -f "$DATA_DIR/capture.json" ]] || { echo "No dataset at $DATA_DIR" >&2; exit 1; }
+[ -f "$DATA_DIR/provenance.json" ] || { echo "No dataset at $DATA_DIR" >&2; exit 1; }
+[ -f "$DATA_DIR/sparse/0/cameras.bin" ] || { echo "No COLMAP model at $DATA_DIR/sparse/0" >&2; exit 1; }
+[ -n "$(ls -A "$DATA_DIR/images_rgba")" ] || { echo "Empty image set at $DATA_DIR/images_rgba" >&2; exit 1; }
 
 # Refuse to start on top of a finished run rather than discover afterwards
 # that the mesh being compared was overwritten halfway through.
