@@ -1,0 +1,14 @@
+# Heavy data lives on Spartan only. Nothing below is ever committed or copied
+# to the laptop: photographs, COLMAP datasets, trained scenes, meshes.
+data/
+output/
+logs/
+envs/
+checkpoints/
+artifacts/
+*.ply
+*.hdf5
+*.h5
+
+# Slurm stdout from accidental local runs.
+*.out
