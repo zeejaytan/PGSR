@@ -18,11 +18,11 @@ resolution a break face needs?). New questions opened here take prefix **`R`**.
 
 | Role | Value |
 |------|--------|
-| GitHub fork (`origin`) | `zeejaytan/PGSR` (to be created; local remote already points at it) |
+| GitHub fork (`origin`) | `zeejaytan/PGSR` |
 | Upstream | `zju3dv/PGSR` (read-only) plus the community masked-fusion construction, pinned per ticket |
-| Spartan checkout (`REMOTE_ROOT`) | `/data/gpfs/projects/punim2657/PGSR/repo` (to be created) |
-| Spartan working area (untracked) | `/data/gpfs/projects/punim2657/PGSR/` — holds `envs/` only if the probe below fails; else `data/`, `output/`, `logs/` |
-| Compute env (reuse-first) | the existing MILo conda env, which already carries the plane rasterizer the vendored renderer imports. Reuse it where its imports resolve; no fresh env build unless an import probe fails, then only the additive delta is recorded in the ticket |
+| Spartan checkout (`REMOTE_ROOT`) | `/data/gpfs/projects/punim2657/PGSR/repo` — detached at the pinned stock commit for trials; slurm tooling enters via `git fetch origin main` + `git checkout origin/main -- slurm scripts`, never a pull that moves HEAD |
+| Spartan working area (untracked) | `/data/gpfs/projects/punim2657/PGSR/` — holds `data/`, `output/`, `logs/` |
+| Compute env (reuse-first) | the existing MILo conda env, which carries everything except the plane rasterizer. One additive build (`slurm/pgsr_build_ext.slurm`) compiles `diff-plane-rasterization` into it; no fresh env |
 | SSH | `Host spartan`, user `zhuojiat` |
 | Remote helpers | `scripts/remote/pull_and_sbatch.sh`, `job_status.sh`, `fetch_artifacts.sh` |
 
