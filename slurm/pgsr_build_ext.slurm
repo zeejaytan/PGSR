@@ -43,5 +43,9 @@ conda activate "$ENV_PREFIX"
 cd "$REPO_DIR/submodules/diff-plane-rasterization"
 "$ENV_PREFIX/bin/pip" install --no-build-isolation .
 
+# Verify from a NEUTRAL directory: importing from inside the source tree picks
+# up the unbuilt local package and fails with a bogus circular-import error
+# (job 30296655 — the wheel was fine, the check was wrong).
+cd /tmp
 "$ENV_PREFIX/bin/python" -c "import diff_plane_rasterization; print('import ok')"
 echo "=== build finished $(date) ==="
