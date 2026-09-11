@@ -35,6 +35,19 @@ Analysis/build code → `scripts/`; versioned Slurm → `slurm/`; method notes �
 what we are trying to establish → `intent/`; fetched samples → `artifacts/` (not source);
 HPC paths → `CLAUDE.local.md`. Do not add files at the repo root beyond the standing set.
 
+## Fork changes against upstream
+
+Keep this list current; it is what a rebase onto upstream has to survive.
+
+1. **`render.py` — fuse through camera-to-world, not its inverse.** Upstream builds
+   `pose` as COLMAP world-to-camera (`view.R` stored transposed, un-transposed at
+   use) and hands it to Open3D `integrate()`, which takes camera-to-world. The
+   extracted mesh then lands in the wrong frame — proven on A03 by
+   `scripts/probe_fusion_pose.py` (0/61590 points forward under the assumed
+   camera vs 85.1% under COLMAP control) with both trial meshes landing 0%
+   inside the OpenMVS reference box. One-line `[PGSR FORK]` invert. Training is
+   untouched (the rasterizer path is self-consistent); only the fused mesh moves.
+
 ## Domain notes
 
 - The renderer file vendored inside MILo is not standalone PGSR. Verdicts here pin

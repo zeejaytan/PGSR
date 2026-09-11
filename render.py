@@ -125,6 +125,14 @@ def render_set(model_path, name, iteration, views, scene, gaussians, pipeline, b
             pose = np.identity(4)
             pose[:3,:3] = view.R.transpose(-1,-2)
             pose[:3, 3] = view.T
+            # Open3D integrate() takes camera-to-world, but the matrix above
+            # is world-to-camera (COLMAP R|t with R stored transposed). Fusing
+            # through it un-inverted puts the mesh in the wrong frame — proven
+            # on A03 by scripts/probe_fusion_pose.py (0/61590 points forward
+            # under the assumed camera vs 85.1% under COLMAP control) and by
+            # both A/B meshes landing 0% inside the OpenMVS reference box.
+            # [PGSR FORK] invert to camera-to-world.
+            pose = np.linalg.inv(pose)
             color = o3d.io.read_image(os.path.join(render_path, view.image_name + ".jpg"))
             depth = o3d.geometry.Image((ref_depth*1000).astype(np.uint16))
             rgbd = o3d.geometry.RGBDImage.create_from_color_and_depth(
