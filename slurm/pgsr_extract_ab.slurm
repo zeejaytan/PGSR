@@ -5,7 +5,7 @@
 #SBATCH --gres=gpu:1
 #SBATCH --ntasks=1
 #SBATCH --cpus-per-task=8
-#SBATCH --mem=128G
+#SBATCH --mem=256G
 #SBATCH --time=04:00:00
 #SBATCH --output=/data/gpfs/projects/punim2657/PGSR/logs/pgsr_extract_ab_%j.log
 
@@ -24,6 +24,9 @@ set -euo pipefail
 MODEL="${1:?usage: sbatch pgsr_extract_ab.slurm <model_dir_name> [voxel] [clusters]}"
 VOXEL="${2:-0.002}"
 NCLUSTER="${3:-10}"
+# Space-separated subset to run (archives are never overwritten: a variant
+# whose archive exists is skipped loudly, so resubmits cost nothing).
+VARIANTS="${VARIANTS:-A B}"
 
 PGSR_ROOT=/data/gpfs/projects/punim2657/PGSR
 REPO_DIR=$PGSR_ROOT/repo
@@ -56,16 +59,32 @@ PY="$ENV_PREFIX/bin/python"
 
 echo
 echo "=== variant A: fusion-masked ==="
+if [[ " $VARIANTS " == *" A "* ]]; then
+if [[ -d "$OUT_DIR/mesh_A_masked" ]]; then
+    echo "mesh_A_masked already archived — skipping A (delete it to re-run)."
+else
 $PY render.py -s "$DATA_DIR" -m "$OUT_DIR" -i images_rgba -r 1 \
     --iteration 30000 --voxel_size "$VOXEL" --num_cluster "$NCLUSTER" --skip_test
 mv "$OUT_DIR/mesh" "$OUT_DIR/mesh_A_masked"
 mv "$OUT_DIR/train/ours_30000" "$OUT_DIR/train_A_ours_30000"
+fi
+else
+echo "(A not in VARIANTS=$VARIANTS — skipping.)"
+fi
 
 echo
 echo "=== variant B: cull-after (unmasked) ==="
+if [[ " $VARIANTS " == *" B "* ]]; then
+if [[ -d "$OUT_DIR/mesh_B_cullafter" ]]; then
+    echo "mesh_B_cullafter already archived — skipping B (delete it to re-run)."
+else
 $PY render.py -s "$DATA_DIR" -m "$OUT_DIR" -i images -r 1 \
     --iteration 30000 --voxel_size "$VOXEL" --num_cluster "$NCLUSTER" --skip_test
 mv "$OUT_DIR/mesh" "$OUT_DIR/mesh_B_cullafter"
+fi
+else
+echo "(B not in VARIANTS=$VARIANTS — skipping.)"
+fi
 
 echo
 echo "=== meshes produced ==="
