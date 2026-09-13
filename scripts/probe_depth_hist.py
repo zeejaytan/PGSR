@@ -15,6 +15,10 @@ CPU-only prints, no files written. Small derived numbers only.
 """
 import torch
 from argparse import ArgumentParser
+from pathlib import Path
+import sys
+
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 from scene import Scene
 from arguments import ModelParams, PipelineParams, get_combined_args
 from gaussian_renderer import GaussianModel, render
