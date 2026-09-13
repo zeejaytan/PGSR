@@ -39,14 +39,8 @@ HPC paths → `CLAUDE.local.md`. Do not add files at the repo root beyond the st
 
 Keep this list current; it is what a rebase onto upstream has to survive.
 
-1. **`render.py` — fuse through camera-to-world, not its inverse.** Upstream builds
-   `pose` as COLMAP world-to-camera (`view.R` stored transposed, un-transposed at
-   use) and hands it to Open3D `integrate()`, which takes camera-to-world. The
-   extracted mesh then lands in the wrong frame — proven on A03 by
-   `scripts/probe_fusion_pose.py` (0/61590 points forward under the assumed
-   camera vs 85.1% under COLMAP control) with both trial meshes landing 0%
-   inside the OpenMVS reference box. One-line `[PGSR FORK]` invert. Training is
-   untouched (the rasterizer path is self-consistent); only the fused mesh moves.
+1. ~~**`render.py` — fuse through camera-to-world, not its inverse.**~~ WITHDRAWN 2026-09-13 (was wrong; upstream pass-through is correct — see below). Do not re-add without a fusion-location check against the training points.
+   - The 2026-09-11 invert (`pose = np.linalg.inv(pose)`, "Open3D takes camera-to-world") was built on an untested assumption: `scripts/probe_fusion_pose.py` only shows pose ≠ inv(pose), never which one the integrator wants. Fused with the invert, variant A lands ~5 units from its own training points ([-0.60,1.19,4.28]..); fused stock, it sits on them ([-0.74,-0.33,-0.44].. vs points [-1.01,-0.31,-0.42]..), same model/depths/masks. Upstream's 0.47 DTU chamfer with W2C passed straight through was the evidence all along. Decisive probes: `scripts/probe_depth_hist.py` (depths acquitted), `scripts/probe_backproject.py` (projection ≠ integration convention).
 
 ## Domain notes
 

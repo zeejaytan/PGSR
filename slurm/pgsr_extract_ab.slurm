@@ -51,8 +51,8 @@ conda activate "$ENV_PREFIX"
 
 [[ -d "$OUT_DIR/point_cloud/iteration_30000" ]] || {
     echo "No finished 30k model at $OUT_DIR" >&2; exit 1; }
-grep -q "linalg.inv(pose)" "$REPO_DIR/render.py" || {
-    echo "render.py lacks the C2W fork fix — refusing to fuse wrong-frame meshes" >&2; exit 1; }
+grep -q "linalg.inv(pose)" "$REPO_DIR/render.py" && {
+    echo "render.py contains the withdrawn C2W invert — refusing to fuse displaced meshes" >&2; exit 1; }
 
 cd "$REPO_DIR"
 PY="$ENV_PREFIX/bin/python"
