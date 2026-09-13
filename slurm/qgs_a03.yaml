@@ -1,0 +1,38 @@
+# QGS A03 trial case (R1 ticket 03). Merged OVER the pinned QGS base.yaml
+# (commit 74d05c9) by scripts/qgs_run_train.py. Every deviation from base is
+# parity with the M8 PGSR verdict, stated per key.
+case_name: A03_sherds
+root_dir: /data/gpfs/projects/punim2657/PGSR/qgs_trial/data_A03
+model_path: /data/gpfs/projects/punim2657/PGSR/output/QGS_A03
+load_model_path: /data/gpfs/projects/punim2657/PGSR/output/QGS_A03
+
+pipeline:
+  depth_ratio: 0.0          # base default; 1 only if render quality demands it
+  voxel_size: 0.002         # 0.75 mm via the 373.733 mm/unit sidecar (M8 parity)
+  sdf_trunc: 0.01           # 5x voxel, same construction as the PGSR trial
+  depth_trunc: 5.0          # base 3.0 NOT used: far-side box content reaches 4.81
+  num_cluster: 10           # M8 parity (10 forced pieces on variant A)
+  mesh_res: 1024
+  unbounded: false
+
+dataset:
+  use_alpha: true           # THE mask switch: RGBA 4th band gates depth at fusion
+  downsample: 1.0           # full 3200x2133 pixels, no silent downsample
+  eval: true
+  hold: 8                   # every 8th view held out (PGSR llffhold=8 parity)
+  undistortion: true        # no-op: trial pixels pre-staged byte-identical
+  white_background: false
+
+gs_model:
+  images: images            # trial symlink -> shared images_rgba (alpha intact)
+
+optimizer:
+  iterations: 30000         # one seed (torch.manual_seed(0) in the driver)
+  densify_grad_threshold: 0.5
+  lambda_dist: 50000.0
+  lambda_normal: 0.05
+  lambda_curv_dist: 0.0     # authors: unsatisfactory, stay off
+  lambda_curv_flat: 0.0
+  multi_view_ncc_weight: 0.15
+  multi_view_geo_weight: 0.03
+  # multi-view weights engage at iter 7000 = the PGSR regs-onset watch point

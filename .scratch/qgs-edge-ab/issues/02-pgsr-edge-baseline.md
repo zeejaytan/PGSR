@@ -6,7 +6,7 @@
 
 **Blocked by:** 01 pin QGS source (voxel/band in mm and mask construction must be stated first, or the baseline measures the wrong grid).
 
-**Status:** claimed — measured + drawn by agent, eye pending (bundle staged, see Needs-eye).
+**Status:** resolved
 
 **Needs-eye:** `visual-qa/preview/manifest_qgs_r1.json` — closes on a witnessed look plus a conservator note, never on numbers alone.
 
@@ -26,3 +26,7 @@ Control: `PGSR/artifacts/review_A_stock/tsdf_fusion_post.ply` via `scripts/measu
 - **Steel 0.0 cm² by component audit:** all 10 components sherd-scale (spans 18–81 mm, areas 2,100–6,300 mm²); no rod/plane rig outliers. Eye-confirmed on renders (no chrome shapes; holes read as missing surface, not steel).
 - **Clamp-contact:** recorded unobserved — fusion-masked build excludes unphotographed contact faces by construction; small white gaps in the close-ups are missing surface, never filled.
 - **Kind so far:** measurement, not verdict — no method/ruler/reference claim attaches to the control alone. R1 boxes stay unticked until 04 scores both meshes.
+
+## Eye 2026-09-13
+
+Conservator looked at the rim close-ups: reads as coarse blocks, edge detail not cleanly legible at this grid. Agent reply: agreed — that is exactly the bar finding (0.77 mm median edges cannot carry 0.2 mm ridges); QGS must beat this picture in 04. Eye closes the PGSR-A side; QGS side stages in 04.
