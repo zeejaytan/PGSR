@@ -13,6 +13,10 @@
 #
 # Workspace-wide helper: copy or symlink into any project that needs it.
 #
+# Default partition is gpu-a100-short: it grants far faster than the full
+# partition and the default 4h hold fits its wall. For longer holds override
+# explicitly: PARTITION=gpu-a100 ./scripts/gpu_session.sh start 8
+#
 # Usage (from the laptop or on Spartan):
 #   ./scripts/gpu_session.sh start [hours]     # default 4
 #   ./scripts/gpu_session.sh run  <command...>
@@ -26,7 +30,7 @@ set -euo pipefail
 
 STATE="${GPU_SESSION_STATE:-$HOME/.milo_gpu_session}"
 LOG_DIR="${GPU_SESSION_LOG_DIR:-/data/gpfs/projects/punim2657/MILo/logs}"
-PARTITION="${PARTITION:-gpu-a100}"
+PARTITION="${PARTITION:-gpu-a100-short}"
 ACCOUNT="${ACCOUNT:-punim2657}"
 CPUS="${CPUS:-16}"
 MEM="${MEM:-128G}"
