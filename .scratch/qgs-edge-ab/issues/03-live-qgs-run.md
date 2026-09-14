@@ -24,6 +24,17 @@
   origin/main -- slurm scripts`. Job 30542576 (old script) cancelled,
   30542583 (fixed script) submitted, laptop poll running.
 
+## Progress 2026-09-14 (env build failed at pip, holder opened)
+
+- Job 30542583: FAILED after ~5 min RUNNING (1.5 h queue). Conda env create
+  succeeded (pkgs fix worked); `pip install` of both CUDA submodules failed
+  with hidden output (`finished with status 'error'`, no compiler message —
+  pip suppresses it). glm submodule present; `envs/qgs` partial env remains.
+- This is now the iterative case: holder session for debug (one queue wait,
+  then free retries) instead of another sbatch per attempt.
+  `scripts/gpu_session.sh` copied from umbrella; step 1 = verbose pip
+  reinstall surfacing the real nvcc error.
+
 - [ ] Single QGS training on `A03_sherds` at full resolution (no silent downsample), one seed, run values as pinned in 01; held-out views kept honest where the build supports them
 - [ ] Single extraction at the stated voxel/band in mm with the stated mask construction; block counts and free-memory figures printed before the call; training-time masking and post-training pruning untouched per M4/M5
 - [ ] Outputs archived without overwriting each other; mesh stats (verts, pieces, bounds vs training points) printed; no batch submission without explicit approval, laptop-side poll on the submit
