@@ -19,6 +19,10 @@ QGS_PIN=74d05c945e99fcaef7afe5a8831903be71ad9b55
 PGSR_ROOT=/data/gpfs/projects/punim2657/PGSR
 QGS_REPO=$PGSR_ROOT/qgs_trial/repo
 ENV_PREFIX=$PGSR_ROOT/envs/qgs
+# Home quota is full (50G used, job 30522489 died extracting pkgs there):
+# keep the multi-GB package cache on project storage instead.
+export CONDA_PKGS_DIRS="$PGSR_ROOT/conda_pkgs"
+mkdir -p "$CONDA_PKGS_DIRS" "$(dirname "$ENV_PREFIX")"
 
 echo "=== QGS env build started $(date) on $(hostname) ==="
 
