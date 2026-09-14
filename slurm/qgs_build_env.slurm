@@ -1,7 +1,7 @@
 #!/bin/bash
 #SBATCH --job-name=qgs-build-env
 #SBATCH --account=punim2657
-#SBATCH --partition=gpu-a100
+#SBATCH --partition=gpu-a100-short
 #SBATCH --gres=gpu:1
 #SBATCH --ntasks=1
 #SBATCH --cpus-per-task=8
@@ -11,9 +11,13 @@
 
 # Fresh QGS conda env (NOT an MILo-env delta: python 3.9.19 + torch 2.2.2 pins
 # differ, reuse-first probe fails by inspection) + both CUDA submodule builds.
-# Runs on gpu-a100 for module-stack parity with the training job, like the
-# PGSR ext build before it. Refuses if the env already exists.
+# Runs on gpu-a100-short: same A100 cards as the training job (module-stack
+# parity, like the PGSR ext build before it) with a faster grant; 2h fits the
+# 4h short wall. Refuses if the env already exists.
 set -euo pipefail
+
+STATUS_DIR="/data/gpfs/projects/punim2657/PGSR/logs"
+trap 'echo "$(date -u +%FT%TZ) job $SLURM_JOB_ID exit $?" >> "$STATUS_DIR/job_status.log"' EXIT
 
 QGS_PIN=74d05c945e99fcaef7afe5a8831903be71ad9b55
 PGSR_ROOT=/data/gpfs/projects/punim2657/PGSR
@@ -35,6 +39,7 @@ export LD_LIBRARY_PATH="$CUDA_HOME/targets/x86_64-linux/lib:${LD_LIBRARY_PATH:-}
 export TORCH_CUDA_ARCH_LIST="8.0"
 
 command -v nvcc || { echo "nvcc missing -- refusing" >&2; exit 1; }
+nvcc --version | tail -1
 eval "$(conda shell.bash hook)"
 
 if [[ -d "$ENV_PREFIX" ]]; then
@@ -47,8 +52,12 @@ echo "checkout pinned at $HAVE"
 
 conda env create -p "$ENV_PREFIX" -f "$QGS_REPO/environment.yml"
 conda activate "$ENV_PREFIX"
-pip install "$QGS_REPO/submodules/diff-quadratic-rasterization"
-pip install "$QGS_REPO/submodules/simple-knn"
+# -v: pip hides the compiler error by default (job 30542583 failed both
+# wheels with no message). Full output lands on GPFS; console keeps the tail.
+pip install -v "$QGS_REPO/submodules/diff-quadratic-rasterization" 2>&1 \
+    | tee "$STATUS_DIR/pip_quad_$SLURM_JOB_ID.log" | tail -n 15
+pip install -v "$QGS_REPO/submodules/simple-knn" 2>&1 \
+    | tee "$STATUS_DIR/pip_knn_$SLURM_JOB_ID.log" | tail -n 15
 
 "$ENV_PREFIX/bin/python" -c \
   "import torch, open3d; import diff_quadratic_rasterization, simple_knn; \
