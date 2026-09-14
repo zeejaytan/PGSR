@@ -35,6 +35,19 @@
   `scripts/gpu_session.sh` copied from umbrella; step 1 = verbose pip
   reinstall surfacing the real nvcc error.
 
+## Progress 2026-09-14 (holder cancelled, batch on short)
+
+- Holder 30546110 (gpu-a100 full) cancelled before grant — laptop going to
+  sleep, so a held node would idle unwatched. Batch job 30557071 submitted on
+  `gpu-a100-short` (same A100 cards, 2h fits 4h wall).
+- Script audit before submit (`d6b5b71`): partial `envs/qgs` removed (old
+  script would have refused); `CONDA_PKGS_DIRS` on GPFS kept; EXIT trap appends
+  to `logs/job_status.log` (poll dies with laptop — log is source of truth);
+  `nvcc --version` printed (CUDA 11.8 vs torch cu121 is the open suspect);
+  `pip install -v` with full output teed to `logs/pip_{quad,knn}_$JOB.log`.
+- Morning check: `sacct -j 30557071` + `tail logs/job_status.log`; on failure
+  read `logs/pip_quad_30557071.log` for the nvcc error.
+
 - [ ] Single QGS training on `A03_sherds` at full resolution (no silent downsample), one seed, run values as pinned in 01; held-out views kept honest where the build supports them
 - [ ] Single extraction at the stated voxel/band in mm with the stated mask construction; block counts and free-memory figures printed before the call; training-time masking and post-training pruning untouched per M4/M5
 - [ ] Outputs archived without overwriting each other; mesh stats (verts, pieces, bounds vs training points) printed; no batch submission without explicit approval, laptop-side poll on the submit
