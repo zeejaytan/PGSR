@@ -8,7 +8,7 @@
 
 **Status:** ready-for-agent
 
-**Needs-eye:** `visual-qa/preview/manifest_qgs_r1.json` — closes on a witnessed QGS-vs-PGSR-A look plus a conservator note, never on numbers alone.
+**Needs-eye:** `visual-qa/preview/qgs_edge_baseline_r1.json` (image close-ups, not a 3D pair — deliberately outside the viewer's `manifest*.json` registry so rescan never tries to stage it) — closes on a witnessed QGS-vs-PGSR-A look plus a conservator note, never on numbers alone.
 
 - [ ] Same-ruler relief comparison on the break-face ribbon: QGS vs PGSR-A fraction within ~1 mm (cutoff stated), cross-view depth disagreement in mm for QGS on the same capture, steel remaining in cm² on the QGS mesh
 - [ ] QGS-vs-PGSR-A break-face close-ups at ~0.2 mm-resolving scale exist before any score; per-vertex unbinned views where a proxy keeps failing

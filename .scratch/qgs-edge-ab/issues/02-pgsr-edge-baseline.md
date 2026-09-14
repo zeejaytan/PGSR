@@ -8,7 +8,7 @@
 
 **Status:** resolved
 
-**Needs-eye:** `visual-qa/preview/manifest_qgs_r1.json` — closes on a witnessed look plus a conservator note, never on numbers alone.
+**Needs-eye:** `visual-qa/preview/qgs_edge_baseline_r1.json` (image close-ups, not a 3D pair — deliberately outside the viewer's `manifest*.json` registry so rescan never tries to stage it) — closes on a witnessed look plus a conservator note, never on numbers alone.
 
 - [x] Break-face relief for the PGSR-A control on A03: method-local Rq-like character at stated scale (see Answer) — ribbon-rim zones, whole-sherd averages shown only in stats.json
 - [x] QGS-vs-PGSR-A close-up views staged at a scale resolving ~0.2 mm ridges before any score; whole-tray views alone do not pass (PGSR-A side staged; QGS side lands in 04)
