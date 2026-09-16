@@ -28,6 +28,13 @@
 - First step-1 attempt refused: cancelled batch 30633199 had started briefly
   before the scancel landed and recreated a partial `envs/qgs`. Removed it over
   ssh (holder still RUNNING) and relaunched step 1 — watcher on the retry.
+- Relaunch FAILED on the real issue: `CONDA_OVERRIDE_CUDA=11.8` was ignored —
+  solver still installed `pytorch 2.2.2 py3.9_cuda12.1`. Holder probe confirmed
+  (`conda list`: `pytorch-cuda 12.1`). Fix committed (`b42ee60`):
+  `conda search` shows `py3.9_cuda11.8_cudnn8.7.0_0` exists for the same pinned
+  torch, so the script now injects `pytorch-cuda=11.8` into a generated copy of
+  the pinned yml (anchor-checked, diff logged; upstream file untouched).
+  Partial cu121 env cleared; step 1 relaunched in the holder with watcher.
 
 ## Progress 2026-09-16 (env build failed on CUDA mismatch, fix committed)
 
