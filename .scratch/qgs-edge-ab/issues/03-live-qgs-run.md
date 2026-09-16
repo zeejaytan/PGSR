@@ -47,6 +47,11 @@
   `MKL_INTERFACE_LAYER`. Fix committed (`a887161`): relax nounset for the
   activation line only. Env cleared for a clean single-log rerun (packages and
   pip wheels are cached, so the rerun is fast); step 1 relaunched with watcher.
+- Relaunch 4 COMPLETE (`import ok`, `torch 2.2.2 cuda True`, exit 0): env
+  `envs/qgs` built with cu118 torch, both CUDA extensions, open3d 0.18.
+  Watch item: pip pulled numpy 2.0.2 over the yml's 1.26.4 and torch 2.2.2
+  warns `_ARRAY_API not found` — `scripts/probe_torch_numpy.py` decides whether
+  numpy goes back to the pinned 1.26.4 before any training.
 
 ## Progress 2026-09-16 (env build failed on CUDA mismatch, fix committed)
 
