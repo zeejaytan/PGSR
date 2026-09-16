@@ -41,6 +41,12 @@
   logs/ — pip looked for `logs/submodules/...`. Fix committed (`0edbb6b`):
   absolutize both submodule paths in the generated file (anchor-checked, diff
   logged). Partial env cleared; step 1 relaunched in the holder with watcher.
+- Relaunch 3 BUILT both wheels (cu118 torch + nvcc 11.8 match — the core
+  problem is solved) but died one line later: `conda activate` under the
+  script's `set -u`, killed by MKL's activate.d script referencing unset
+  `MKL_INTERFACE_LAYER`. Fix committed (`a887161`): relax nounset for the
+  activation line only. Env cleared for a clean single-log rerun (packages and
+  pip wheels are cached, so the rerun is fast); step 1 relaunched with watcher.
 
 ## Progress 2026-09-16 (env build failed on CUDA mismatch, fix committed)
 
