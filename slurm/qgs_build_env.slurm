@@ -27,13 +27,18 @@ ENV_PREFIX=$PGSR_ROOT/envs/qgs
 # keep the multi-GB package cache on project storage instead.
 export CONDA_PKGS_DIRS="$PGSR_ROOT/conda_pkgs"
 mkdir -p "$CONDA_PKGS_DIRS" "$(dirname "$ENV_PREFIX")"
-# Torch/CUDA parity (job 30557071): QGS environment.yml pins torch 2.2.2, and
-# conda resolves it to the cu121 build (torch.version.cuda 12.1), while the
-# PGSR-parity module stack here loads CUDA 11.8. torch's cpp_extension refuses
-# any mismatch, so both CUDA wheels failed. The MILo env precedent is
-# torch cu118 + CUDA 11.8 (works). Override the solver's detected CUDA so it
-# picks the cu118 build of the same pinned torch, matching the nvcc below.
-export CONDA_OVERRIDE_CUDA="11.8"
+# Torch/CUDA parity (jobs 30557071, holder 30633299): QGS environment.yml pins
+# torch 2.2.2, and conda resolves it to the cu121 build (torch.version.cuda
+# 12.1), while the PGSR-parity module stack here loads CUDA 11.8.
+# torch's cpp_extension refuses any mismatch, so both CUDA wheels failed.
+# CONDA_OVERRIDE_CUDA=11.8 was tried and IGNORED (solver still picked
+# py3.9_cuda12.1). The fix that works on this solver: add the `pytorch-cuda`
+# selector metapackage, the documented conda-native way to pick a CUDA flavor.
+# Verified `conda search` offers pytorch 2.2.2 py3.9_cuda11.8_cudnn8.7.0_0, so
+# the pinned torch version is unchanged — only the CUDA flavor is selected.
+# The pinned upstream file is never edited: the selector is injected into a
+# generated copy (diff it against the pin in the log). Same precedent as the
+# MILo env (torch cu118 + CUDA 11.8, builds fine).
 
 echo "=== QGS env build started $(date) on $(hostname) ==="
 
@@ -57,7 +62,20 @@ HAVE=$(git -C "$QGS_REPO" rev-parse HEAD)
 [[ "$HAVE" == "$QGS_PIN" ]] || { echo "checkout at $HAVE, want $QGS_PIN -- refusing" >&2; exit 1; }
 echo "checkout pinned at $HAVE"
 
-conda env create -p "$ENV_PREFIX" -f "$QGS_REPO/environment.yml"
+# Build the effective env file: pinned upstream yml + the CUDA-flavor selector.
+# Anchor on the exact pinned line; refuse if the upstream file ever drifts.
+ENV_YML="$STATUS_DIR/qgs_env_11.8_${SLURM_JOB_ID:?}.yml"
+grep -qx '  - pytorch=2.2.2' "$QGS_REPO/environment.yml" \
+    || { echo "anchor 'pytorch=2.2.2' not found in pinned environment.yml -- refusing" >&2; exit 1; }
+sed 's/^  - pytorch=2.2.2$/  - pytorch=2.2.2\n  - pytorch-cuda=11.8/' \
+    "$QGS_REPO/environment.yml" > "$ENV_YML"
+diff <(grep -v '^name:' "$QGS_REPO/environment.yml") <(grep -v '^name:' "$ENV_YML") \
+    || true  # the ONLY intended difference is the line below
+grep -qx '  - pytorch-cuda=11.8' "$ENV_YML" \
+    || { echo "selector injection failed -- refusing" >&2; exit 1; }
+echo "effective env file: $ENV_YML (pinned yml + pytorch-cuda=11.8)"
+
+conda env create -p "$ENV_PREFIX" -f "$ENV_YML"
 conda activate "$ENV_PREFIX"
 # -v: pip hides the compiler error by default (job 30542583 failed both
 # wheels with no message). Full output lands on GPFS; console keeps the tail.
