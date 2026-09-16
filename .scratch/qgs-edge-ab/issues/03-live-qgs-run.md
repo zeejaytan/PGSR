@@ -59,6 +59,11 @@
 - Env VERIFIED in-holder: numpy 1.26.4, torch 2.2.2 cu118, from_numpy ok,
   open3d 0.18 ok, rasterizer+knn ok, cuda available True. Step 1 (env) done.
   Next: stage A03 data (step 2), then the single 30k training.
+- Staging DONE in-holder: 164 RGBA views (alpha spot-check ok), sparse/0
+  compat links, 164 undistorted byte copies — shared data untouched.
+- Training SUBMITTED as batch 30635107 (12h wall, gpu-a100, checkpoints at 7k
+  + 30k) with explicit conservator approval: the run needs no interaction and
+  outlasts the holder (~18:40 expiry). Laptop poll watching (5-min interval).
 
 ## Progress 2026-09-16 (env build failed on CUDA mismatch, fix committed)
 
