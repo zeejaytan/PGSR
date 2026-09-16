@@ -56,6 +56,9 @@
   available` under numpy 2.0.2 — training would crash on the first data load.
   Fix: restore the yml's own `numpy==1.26.4` after the pip installs (script
   change, same provenance as the rest of the build).
+- Env VERIFIED in-holder: numpy 1.26.4, torch 2.2.2 cu118, from_numpy ok,
+  open3d 0.18 ok, rasterizer+knn ok, cuda available True. Step 1 (env) done.
+  Next: stage A03 data (step 2), then the single 30k training.
 
 ## Progress 2026-09-16 (env build failed on CUDA mismatch, fix committed)
 
