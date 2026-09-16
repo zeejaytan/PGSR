@@ -6,7 +6,21 @@
 
 **Blocked by:** 01 pin QGS source (GO required — missing mask construction stops here), 02 PGSR-A baseline (control must exist first).
 
-**Status:** env build job 30633199 submitted (cu118 fix) — laptop poll running
+**Status:** holder session 30633299 requested (interactive, replaces batch) — waiting for grant
+
+## Progress 2026-09-16 (holder replaces batch)
+
+- Batch 30633199 (cu118 fix) cancelled while PENDING — per conservator: use a
+  holder, the env build may need iterative work.
+- First holder request 30633296 landed on `gpu-a100` full: the session script
+  defaults to 16 CPU / 128 GB, and the submit hook bumps anything over 8 CPUs
+  off short. Cancelled; re-requested as 30633299 with `CPUS=8 MEM=64G` (covers
+  step 1 env build), holding on `gpu-a100-short` for the faster grant.
+- Watcher running on the laptop; grant notifies like a poll. First command
+  inside once granted: the env build (step 1 only), via
+  `srun --jobid=<id> --overlap` per `scripts/gpu_session.sh run`.
+- Note: the watcher for cancelled 30633296 never exits on its own (loops on
+  GONE) — harmless ssh noise, dies with the laptop session; ignore it.
 
 ## Progress 2026-09-16 (env build failed on CUDA mismatch, fix committed)
 
