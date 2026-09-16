@@ -35,6 +35,12 @@
   torch, so the script now injects `pytorch-cuda=11.8` into a generated copy of
   the pinned yml (anchor-checked, diff logged; upstream file untouched).
   Partial cu121 env cleared; step 1 relaunched in the holder with watcher.
+- Relaunch 2 SOLVED the solver side (selector accepted, packages downloaded)
+  but failed on a self-inflicted path bug: conda resolves `submodules/...` pip
+  paths relative to the env FILE's directory, and the generated copy lives in
+  logs/ — pip looked for `logs/submodules/...`. Fix committed (`0edbb6b`):
+  absolutize both submodule paths in the generated file (anchor-checked, diff
+  logged). Partial env cleared; step 1 relaunched in the holder with watcher.
 
 ## Progress 2026-09-16 (env build failed on CUDA mismatch, fix committed)
 
