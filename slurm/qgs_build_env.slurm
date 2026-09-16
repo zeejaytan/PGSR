@@ -63,17 +63,27 @@ HAVE=$(git -C "$QGS_REPO" rev-parse HEAD)
 echo "checkout pinned at $HAVE"
 
 # Build the effective env file: pinned upstream yml + the CUDA-flavor selector.
-# Anchor on the exact pinned line; refuse if the upstream file ever drifts.
+# Anchor on the exact pinned lines; refuse if the upstream file ever drifts.
+# Two rewrites, both logged by diff below: (1) add `pytorch-cuda=11.8`;
+# (2) absolutize the `submodules/...` pip paths — conda resolves them relative
+# to the env FILE's directory, and this generated copy lives in logs/ (holder
+# 30633299: relative paths made pip look for logs/submodules/...).
 ENV_YML="$STATUS_DIR/qgs_env_11.8_${SLURM_JOB_ID:?}.yml"
 grep -qx '  - pytorch=2.2.2' "$QGS_REPO/environment.yml" \
     || { echo "anchor 'pytorch=2.2.2' not found in pinned environment.yml -- refusing" >&2; exit 1; }
-sed 's/^  - pytorch=2.2.2$/  - pytorch=2.2.2\n  - pytorch-cuda=11.8/' \
+grep -qx '    - submodules/diff-quadratic-rasterization' "$QGS_REPO/environment.yml" \
+    || { echo "anchor submodule paths not found in pinned environment.yml -- refusing" >&2; exit 1; }
+sed -e 's/^  - pytorch=2.2.2$/  - pytorch=2.2.2\n  - pytorch-cuda=11.8/' \
+    -e "s|^    - submodules/|    - $QGS_REPO/submodules/|" \
     "$QGS_REPO/environment.yml" > "$ENV_YML"
 diff <(grep -v '^name:' "$QGS_REPO/environment.yml") <(grep -v '^name:' "$ENV_YML") \
-    || true  # the ONLY intended difference is the line below
+    || true  # the ONLY intended differences are the selector + 2 absolute paths
 grep -qx '  - pytorch-cuda=11.8' "$ENV_YML" \
     || { echo "selector injection failed -- refusing" >&2; exit 1; }
-echo "effective env file: $ENV_YML (pinned yml + pytorch-cuda=11.8)"
+grep -q "    - $QGS_REPO/submodules/diff-quadratic-rasterization" "$ENV_YML" \
+    && grep -q "    - $QGS_REPO/submodules/simple-knn" "$ENV_YML" \
+    || { echo "submodule path absolutization failed -- refusing" >&2; exit 1; }
+echo "effective env file: $ENV_YML (pinned yml + pytorch-cuda=11.8 + absolute submodule paths)"
 
 conda env create -p "$ENV_PREFIX" -f "$ENV_YML"
 conda activate "$ENV_PREFIX"
