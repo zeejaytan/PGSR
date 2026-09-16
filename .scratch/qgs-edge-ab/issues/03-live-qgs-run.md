@@ -25,6 +25,9 @@
   Priority). Step 1 (`bash slurm/qgs_build_env.slurm` via `gpu_session.sh run`,
   fetch + checkout refreshed first) is running inside the holder with a laptop
   watcher; log `logs/qgs_build_env_30633299.log`.
+- First step-1 attempt refused: cancelled batch 30633199 had started briefly
+  before the scancel landed and recreated a partial `envs/qgs`. Removed it over
+  ssh (holder still RUNNING) and relaunched step 1 — watcher on the retry.
 
 ## Progress 2026-09-16 (env build failed on CUDA mismatch, fix committed)
 
