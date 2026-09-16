@@ -86,7 +86,13 @@ grep -q "    - $QGS_REPO/submodules/diff-quadratic-rasterization" "$ENV_YML" \
 echo "effective env file: $ENV_YML (pinned yml + pytorch-cuda=11.8 + absolute submodule paths)"
 
 conda env create -p "$ENV_PREFIX" -f "$ENV_YML"
+# conda's MKL activate.d scripts reference unset variables, and this script
+# runs under `set -u` (holder 30633299: activation died on
+# `MKL_INTERFACE_LAYER: unbound variable` AFTER a successful env create).
+# Relax nounset for the activation only, then restore it.
+set +u
 conda activate "$ENV_PREFIX"
+set -u
 # -v: pip hides the compiler error by default (job 30542583 failed both
 # wheels with no message). Full output lands on GPFS; console keeps the tail.
 pip install -v "$QGS_REPO/submodules/diff-quadratic-rasterization" 2>&1 \
