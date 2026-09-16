@@ -6,7 +6,7 @@
 
 **Blocked by:** 01 pin QGS source (GO required — missing mask construction stops here), 02 PGSR-A baseline (control must exist first).
 
-**Status:** env build job 30557071 FAILED (CUDA mismatch, cause found) — fix ready, resubmit pending
+**Status:** env build job 30633199 submitted (cu118 fix) — laptop poll running
 
 ## Progress 2026-09-16 (env build failed on CUDA mismatch, fix committed)
 
