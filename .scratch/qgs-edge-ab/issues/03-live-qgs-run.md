@@ -52,6 +52,10 @@
   Watch item: pip pulled numpy 2.0.2 over the yml's 1.26.4 and torch 2.2.2
   warns `_ARRAY_API not found` — `scripts/probe_torch_numpy.py` decides whether
   numpy goes back to the pinned 1.26.4 before any training.
+- Probe DECIDED: `torch.from_numpy` raises `RuntimeError: Numpy is not
+  available` under numpy 2.0.2 — training would crash on the first data load.
+  Fix: restore the yml's own `numpy==1.26.4` after the pip installs (script
+  change, same provenance as the rest of the build).
 
 ## Progress 2026-09-16 (env build failed on CUDA mismatch, fix committed)
 

@@ -100,6 +100,12 @@ pip install -v "$QGS_REPO/submodules/diff-quadratic-rasterization" 2>&1 \
 pip install -v "$QGS_REPO/submodules/simple-knn" 2>&1 \
     | tee "$STATUS_DIR/pip_knn_$SLURM_JOB_ID.log" | tail -n 15
 
+# pip's open3d dependency chain upgrades numpy to 2.x, under which torch
+# 2.2.2 (a NumPy-1.x build) cannot bridge: from_numpy raises
+# "RuntimeError: Numpy is not available" (probe scripts/probe_torch_numpy.py).
+# Restore the yml's own numpy=1.26.4 pin after the pip installs.
+pip install "numpy==1.26.4" 2>&1 | tail -n 3
+
 "$ENV_PREFIX/bin/python" -c \
   "import torch, open3d; import diff_quadratic_rasterization, simple_knn; \
    print('torch', torch.__version__, 'cuda', torch.cuda.is_available()); \
