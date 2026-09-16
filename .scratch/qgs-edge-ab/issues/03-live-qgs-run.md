@@ -6,9 +6,9 @@
 
 **Blocked by:** 01 pin QGS source (GO required — missing mask construction stops here), 02 PGSR-A baseline (control must exist first).
 
-**Status:** holder session 30633299 requested (interactive, replaces batch) — waiting for grant
+**Status:** holder 30633299 GRANTED (spartan-gpgpu127) — step 1 env build running inside it
 
-## Progress 2026-09-16 (holder replaces batch)
+## Progress 2026-09-16 (holder granted, step 1 running)
 
 - Batch 30633199 (cu118 fix) cancelled while PENDING — per conservator: use a
   holder, the env build may need iterative work.
@@ -21,6 +21,10 @@
   `srun --jobid=<id> --overlap` per `scripts/gpu_session.sh run`.
 - Note: the watcher for cancelled 30633296 never exits on its own (loops on
   GONE) — harmless ssh noise, dies with the laptop session; ignore it.
+- Grant arrived ~1h10 after request (short partition still queued behind
+  Priority). Step 1 (`bash slurm/qgs_build_env.slurm` via `gpu_session.sh run`,
+  fetch + checkout refreshed first) is running inside the holder with a laptop
+  watcher; log `logs/qgs_build_env_30633299.log`.
 
 ## Progress 2026-09-16 (env build failed on CUDA mismatch, fix committed)
 
