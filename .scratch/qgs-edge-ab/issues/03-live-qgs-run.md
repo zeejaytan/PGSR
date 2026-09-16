@@ -6,9 +6,9 @@
 
 **Blocked by:** 01 pin QGS source (GO required — missing mask construction stops here), 02 PGSR-A baseline (control must exist first).
 
-**Status:** claimed — env build job 30542583 running (fix for quota failure below)
+**Status:** env build job 30557071 FAILED (CUDA mismatch, cause found) — fix ready, resubmit pending
 
-## Progress 2026-09-14
+## Progress 2026-09-16 (env build failed on CUDA mismatch, fix committed)
 
 - Job 30522489 (env build, old script): FAILED after ~90 s — `~/.conda/pkgs`
   extracts died with `Errno 122 Disk quota exceeded` (home at 51200M/51200M).
@@ -47,6 +47,22 @@
   `pip install -v` with full output teed to `logs/pip_{quad,knn}_$JOB.log`.
 - Morning check: `sacct -j 30557071` + `tail logs/job_status.log`; on failure
   read `logs/pip_quad_30557071.log` for the nvcc error.
+
+## Progress 2026-09-16 (morning check result)
+
+- Job 30557071: FAILED after ~2 min. No `logs/pip_quad_30557071.log` exists —
+  the failure is inside `conda env create` itself (environment.yml pip section
+  builds both wheels), before the script's explicit pip lines run.
+- Cause (log lines 101-106): `RuntimeError: detected CUDA 11.8 mismatches the
+  version used to compile PyTorch (12.1)`. Conda resolved torch 2.2.2 to cu121
+  while the script loads CUDA/11.8.0. The open suspect from 09-14 is confirmed.
+  Precedent: MILo env torch is 2.3.1+cu118 and builds fine on CUDA 11.8.
+- Fix: `slurm/qgs_build_env.slurm` now exports `CONDA_OVERRIDE_CUDA="11.8"` so
+  the solver picks the cu118 build of the same pinned torch 2.2.2, matching
+  nvcc 11.8. No pin change, same A100 module stack as PGSR.
+- Partial `envs/qgs` must be removed on Spartan before resubmit (script refuses
+  when it exists). Resubmit via fetch + `checkout origin/main -- slurm scripts`
+  (detached checkout, no pull), then sbatch + laptop poll.
 
 - [ ] Single QGS training on `A03_sherds` at full resolution (no silent downsample), one seed, run values as pinned in 01; held-out views kept honest where the build supports them
 - [ ] Single extraction at the stated voxel/band in mm with the stated mask construction; block counts and free-memory figures printed before the call; training-time masking and post-training pruning untouched per M4/M5

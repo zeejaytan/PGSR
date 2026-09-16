@@ -27,6 +27,13 @@ ENV_PREFIX=$PGSR_ROOT/envs/qgs
 # keep the multi-GB package cache on project storage instead.
 export CONDA_PKGS_DIRS="$PGSR_ROOT/conda_pkgs"
 mkdir -p "$CONDA_PKGS_DIRS" "$(dirname "$ENV_PREFIX")"
+# Torch/CUDA parity (job 30557071): QGS environment.yml pins torch 2.2.2, and
+# conda resolves it to the cu121 build (torch.version.cuda 12.1), while the
+# PGSR-parity module stack here loads CUDA 11.8. torch's cpp_extension refuses
+# any mismatch, so both CUDA wheels failed. The MILo env precedent is
+# torch cu118 + CUDA 11.8 (works). Override the solver's detected CUDA so it
+# picks the cu118 build of the same pinned torch, matching the nvcc below.
+export CONDA_OVERRIDE_CUDA="11.8"
 
 echo "=== QGS env build started $(date) on $(hostname) ==="
 
