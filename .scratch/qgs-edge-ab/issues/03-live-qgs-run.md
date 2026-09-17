@@ -6,7 +6,15 @@
 
 **Blocked by:** 01 pin QGS source (GO required — missing mask construction stops here), 02 PGSR-A baseline (control must exist first).
 
-**Status:** training resubmit APPROVED — env rebuild batch 30694282 running, training follows on success (laptop poll watching)
+**Status:** training batch 30694410 SUBMITTED (pending GPU grant) — laptop poll watching (5-min interval)
+
+## Progress 2026-09-18 (env rebuilt, training submitted)
+
+- Rebuild 30694282: COMPLETED exit 0 (~1 min RUNNING — caches held).
+- Training **30694410** submitted on `gpu-a100` (12h wall, checkpoints 7k +
+  30k); state PENDING (Priority) at submit. Staging re-runs as a no-op inside
+  the job. Laptop poll watching; verdict checkpoint per the script: render
+  held-out views at 7k vs 30k BEFORE fusing.
 
 ## Progress 2026-09-17 (resubmit: my cleanup error, env rebuild, training next)
 
