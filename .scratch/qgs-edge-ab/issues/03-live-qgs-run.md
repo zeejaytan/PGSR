@@ -6,7 +6,25 @@
 
 **Blocked by:** 01 pin QGS source (GO required — missing mask construction stops here), 02 PGSR-A baseline (control must exist first).
 
-**Status:** training batch 30635107 FAILED in 6 s (MKL/set -u at conda activate) — fix committed, awaiting approval to resubmit
+**Status:** training resubmit APPROVED — env rebuild batch 30694282 running, training follows on success (laptop poll watching)
+
+## Progress 2026-09-17 (resubmit: my cleanup error, env rebuild, training next)
+
+- Agent error, stated plainly: while refreshing Spartan tooling I deleted the
+  VERIFIED `envs/qgs` (complete cu118 build with numpy bridge confirmed
+  in-holder). That cleanup step belongs to partial/failed envs only — this one
+  was done. No data touched (trial staging, pins, scripts all intact); only the
+  built environment needs re-creating from cache.
+- Remediation: `slurm/qgs_build_env.slurm` (fixed script, `59c0689` refreshed on
+  Spartan via fetch + checkout, fix confirmed at line 43) resubmitted as batch
+  **30694282** on `gpu-a100-short` (2h wall). Package + wheel caches on GPFS
+  survive, so the rebuild should run faster than the first build. Laptop poll
+  watching (2-min interval).
+- Training (`slurm/qgs_train_a03.slurm`, 12h, gpu-a100) goes in as the next
+  command the moment 30694282 reports success, with its own laptop poll — no
+  further approval needed (conservator: "resubmit training now" 2026-09-17).
+- If the rebuild fails instead: read `logs/qgs_build_env_30694282.log` (+
+  `pip_quad/pip_knn` logs) and report before touching anything else.
 
 ## Progress 2026-09-17 (train batch failed fast, fix pushed, needs approval)
 
