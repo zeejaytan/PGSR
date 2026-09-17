@@ -17,6 +17,9 @@
 # Usage: sbatch slurm/qgs_train_a03.slurm
 set -euo pipefail
 
+STATUS_DIR="/data/gpfs/projects/punim2657/PGSR/logs"
+trap 'echo "$(date -u +%FT%TZ) job $SLURM_JOB_ID exit $?" >> "$STATUS_DIR/job_status.log"' EXIT
+
 QGS_PIN=74d05c945e99fcaef7afe5a8831903be71ad9b55
 PGSR_ROOT=/data/gpfs/projects/punim2657/PGSR
 QGS_REPO=$PGSR_ROOT/qgs_trial/repo
@@ -35,7 +38,11 @@ export CUDA_HOME="${EBROOTCUDA:?}"
 export LD_LIBRARY_PATH="$CUDA_HOME/targets/x86_64-linux/lib:${LD_LIBRARY_PATH:-}"
 
 eval "$(conda shell.bash hook)"
+# MKL activate.d references unset vars under `set -u` (build job: `MKL_INTERFACE_LAYER:
+# unbound variable`) -- relax nounset for the activation only, then restore.
+set +u
 conda activate "$ENV_PREFIX"
+set -u
 
 HAVE=$(git -C "$QGS_REPO" rev-parse HEAD)
 [[ "$HAVE" == "$QGS_PIN" ]] || { echo "checkout at $HAVE, want $QGS_PIN -- refusing" >&2; exit 1; }

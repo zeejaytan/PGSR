@@ -16,6 +16,9 @@
 # Usage: sbatch slurm/qgs_extract_a03.slurm
 set -euo pipefail
 
+STATUS_DIR="/data/gpfs/projects/punim2657/PGSR/logs"
+trap 'echo "$(date -u +%FT%TZ) job $SLURM_JOB_ID exit $?" >> "$STATUS_DIR/job_status.log"' EXIT
+
 PGSR_ROOT=/data/gpfs/projects/punim2657/PGSR
 QGS_REPO=$PGSR_ROOT/qgs_trial/repo
 OUT_DIR=$PGSR_ROOT/output/QGS_A03
@@ -33,7 +36,10 @@ export CUDA_HOME="${EBROOTCUDA:?}"
 export LD_LIBRARY_PATH="$CUDA_HOME/targets/x86_64-linux/lib:${LD_LIBRARY_PATH:-}"
 
 eval "$(conda shell.bash hook)"
+# Same MKL/set -u guard as the train script: relax nounset for activation only.
+set +u
 conda activate "$ENV_PREFIX"
+set -u
 
 [[ -d "$OUT_DIR/point_cloud/iteration_30000" ]] || {
     echo "No finished 30k model at $OUT_DIR -- refusing" >&2; exit 1; }
