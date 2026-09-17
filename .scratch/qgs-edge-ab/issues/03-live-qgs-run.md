@@ -6,7 +6,27 @@
 
 **Blocked by:** 01 pin QGS source (GO required — missing mask construction stops here), 02 PGSR-A baseline (control must exist first).
 
-**Status:** holder 30633299 GRANTED (spartan-gpgpu127) — step 1 env build running inside it
+**Status:** training batch 30635107 FAILED in 6 s (MKL/set -u at conda activate) — fix committed, awaiting approval to resubmit
+
+## Progress 2026-09-17 (train batch failed fast, fix pushed, needs approval)
+
+- Batch 30635107 (12h, gpu-a100): FAILED after 6 s, exit 1 — log
+  `logs/qgs_train_a03_30635107.log` dies at `conda activate` with
+  `MKL_INTERFACE_LAYER: unbound variable`. Same MKL/`set -u` kill fixed in the
+  build script (`a887161`) but never ported to the train script. Env, staging,
+  and pins all intact (holder staging: 164 RGBA views, sparse/0 links,
+  164 undistorted copies verified; `qgs_trial/data_A03/` holds
+  images/images_undistorted_1.0/sparse). No GPU burned beyond the 6 s.
+- Fix committed + pushed (`59c0689`): `set +u` / `set -u` guard around
+  `conda activate` in BOTH `slurm/qgs_train_a03.slurm` and
+  `slurm/qgs_extract_a03.slurm` (extract had the same latent bug), plus the
+  EXIT-trap to `logs/job_status.log` per `docs/agents/slurm.md` (the failed job
+  left no line there — that gap is now closed). `bash -n` clean on both.
+- Resubmit path (needs explicit conservator approval per this ticket):
+  Spartan checkout refreshes tooling via `fetch origin main` + `checkout
+  origin/main -- slurm scripts` (detached HEAD, no pull), then
+  `sbatch slurm/qgs_train_a03.slurm` + laptop-side poll. Staging re-runs as a
+  no-op (0 copies). No holder needed — the 12h run outlasts any holder.
 
 ## Progress 2026-09-16 (holder granted, step 1 running)
 
