@@ -6,7 +6,7 @@
 #SBATCH --ntasks=1
 #SBATCH --cpus-per-task=8
 #SBATCH --mem=128G
-#SBATCH --time=12:00:00
+#SBATCH --time=14:00:00
 #SBATCH --output=/data/gpfs/projects/punim2657/PGSR/logs/qgs_train_a03_%j.log
 
 # Single pinned QGS training on the staged A03 trial root: full resolution,
