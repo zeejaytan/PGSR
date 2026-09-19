@@ -6,7 +6,7 @@
 
 **Blocked by:** 01 pin QGS source (GO required — missing mask construction stops here), 02 PGSR-A baseline (control must exist first).
 
-**Status:** training batch 30694410 TIMED OUT at the 12h wall at 28,870/30,000 (96%) — decision needed: clean re-run vs amend endpoint
+**Status:** clean re-run batch 30761983 SUBMITTED (14h wall, same seed/pin) — laptop poll watching (5-min interval)
 
 ## Progress 2026-09-19 (TIMEOUT at 96%, no true resume exists)
 
