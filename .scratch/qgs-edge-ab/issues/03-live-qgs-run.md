@@ -6,7 +6,30 @@
 
 **Blocked by:** 01 pin QGS source (GO required — missing mask construction stops here), 02 PGSR-A baseline (control must exist first).
 
-**Status:** training batch 30694410 SUBMITTED (pending GPU grant) — laptop poll watching (5-min interval)
+**Status:** training batch 30694410 TIMED OUT at the 12h wall at 28,870/30,000 (96%) — decision needed: clean re-run vs amend endpoint
+
+## Progress 2026-09-19 (TIMEOUT at 96%, no true resume exists)
+
+- 30694410: TIMEOUT after 12:00:14 (start 12:44:53 → killed 00:45:07). Last log
+  line: iter **28,870/30,000**, Loss ~0.007–0.01, geo/ncc active, 6.5M points.
+  `iteration_7000/` checkpoint saved (causal-test render source intact); no
+  30k snapshot. Laptop poll died with a server restart — caught by direct
+  `sacct` + `job_status.log` check per `docs/agents/slurm.md`, as designed.
+- No true resume: the driver passes `checkpoint=None`,
+  `checkpoint_iterations=[]`, and `iteration_7000/` holds only
+  `point_cloud.ply` (a snapshot, no optimizer state — `train.py training()`
+  resumes only from a torch checkpoint file). Continuing means restarting
+  from 0. A resume-from-ply hybrid would restart optimizer/schedule — a new
+  method, not a resume. Not recommended.
+- Pace math: 28,870 iters in ~11h58m training → 30k needs ~12h25m + ~2 min
+  startup. `gpu-a100` allows up to 7 days, so a 14h wall fits honestly (not
+  the short partition — 4h wall cannot hold this).
+- Options: (a) clean re-run 0→30k, 14h wall, same seed/pin (~12.5 GPU-h,
+  pin untouched); (b) amend the pin to accept 28.87k (loss flat ~0.006–0.01
+  since ~iter 500, regs-onset window 7k→28.87k intact — defensible but a
+  post-hoc pin change, the kind of silent tuning the spec forbids).
+  Agent opinion: (a) — the trial's currency is pinned run values; the GPU
+  cost is inside the "days" budget. Awaiting conservator call.
 
 ## Progress 2026-09-18 (env rebuilt, training submitted)
 
