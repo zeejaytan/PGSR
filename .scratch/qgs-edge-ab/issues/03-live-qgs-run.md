@@ -6,7 +6,19 @@
 
 **Blocked by:** 01 pin QGS source (GO required — missing mask construction stops here), 02 PGSR-A baseline (control must exist first).
 
-**Status:** training COMPLETE (batch 30761983, exit 0, 12h35m) — 7k + 30k checkpoints saved; extraction needs approval
+**Status:** extraction batch 30829214 SUBMITTED (bumped to gpu-a100 full by scheduler: 256G > short limit) — laptop poll watching
+
+## Progress 2026-09-20 (extraction submitted)
+
+- Conservator approved extraction 2026-09-20. Spartan tooling refreshed to
+  `dd97f17`; `sbatch slurm/qgs_extract_a03.slurm` → **30829214**. Scheduler
+  note: lua hook moved it from `gpu-a100-short` to `gpu-a100` (256G request
+  exceeds short's ~124G cap) — same A100 cards, 4h wall unchanged, only the
+  queue differs. Watch item: full-partition queue may be slower than short.
+- On success: fused mesh lands in `output/QGS_A03/`; then fetch to
+  `artifacts/` and score in ticket 04 (relief fraction, close-ups, steel
+  cm², depth disagreement, R1 write-back). A block/OOM-class crash reads as
+  the known TSDF ceiling per R1's gate — amend, don't work around.
 
 ## Progress 2026-09-20 (re-run finished clean)
 
