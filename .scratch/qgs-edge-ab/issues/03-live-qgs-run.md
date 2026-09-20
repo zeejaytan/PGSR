@@ -6,7 +6,20 @@
 
 **Blocked by:** 01 pin QGS source (GO required — missing mask construction stops here), 02 PGSR-A baseline (control must exist first).
 
-**Status:** clean re-run batch 30761983 SUBMITTED (14h wall, same seed/pin) — laptop poll watching (5-min interval)
+**Status:** training COMPLETE (batch 30761983, exit 0, 12h35m) — 7k + 30k checkpoints saved; extraction needs approval
+
+## Progress 2026-09-20 (re-run finished clean)
+
+- 30761983: COMPLETED exit 0 (start 05:05:44 → end 17:40:44, 12h35m — inside
+  the 14h wall with margin). `output/QGS_A03/point_cloud/` holds
+  `iteration_7000/` + `iteration_30000/` (each `point_cloud.ply`). Log closes
+  with "Training complete" + the verdict checkpoint (render 7k vs 30k BEFORE
+  fusing). Laptop poll died in another server restart — caught by direct
+  `sacct` + `job_status.log`, as before.
+- Ticket 03's remaining boxes: single extraction at the stated voxel/band
+  (`slurm/qgs_extract_a03.slurm`, 4h, short partition — MKL guard + EXIT trap
+  already ported, `59c0689`), then mesh stats. Extraction is a batch submit:
+  needs explicit conservator approval per this ticket.
 
 ## Progress 2026-09-19 (TIMEOUT at 96%, no true resume exists)
 
