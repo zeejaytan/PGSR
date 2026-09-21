@@ -6,7 +6,32 @@
 
 **Blocked by:** 01 pin QGS source (GO required — missing mask construction stops here), 02 PGSR-A baseline (control must exist first).
 
-**Status:** extraction batch 30829214 SUBMITTED (bumped to gpu-a100 full by scheduler: 256G > short limit) — laptop poll watching
+**Status:** resolved — extraction 30829214 COMPLETED exit 0; fused mesh exists, no ceiling hit; scoring moves to 04
+
+## Progress 2026-09-21 (extraction done, ticket closed)
+
+- 30829214: COMPLETED exit 0 in 4m28s (start 23:30:16 → end 23:34:44 2026-09-20).
+  No block/OOM crash at the required voxel — the TSDF-ceiling branch of R1's
+  gate did not trigger. Laptop poll died in another server restart; caught by
+  direct `sacct` + `job_status.log` as before.
+- Mesh: `output/QGS_A03/train/ours_30000/fuse.ply` raw **1,231,617** verts →
+  `fuse_post.ply` **588,006** verts after the small-component filter. (PGSR-A
+  control for scale: 96,719 verts — QGS is ~6× denser at the same 0.75 mm
+  grid, as befits a splat-fed fusion; density ≠ relief until 04 measures it.)
+- Fetched 2026-09-21: `artifacts/qgs_A03_fuse_post.ply` (29 MB, local-only).
+  Verified on load: 587,957 verts / 1,104,651 faces, bounds
+  [-0.75..0.54, -0.77..0.99, -0.80..0.87] scene units — sits on the training
+  points' neighborhood (same unit scale as the PGSR-A control), not displaced
+  like the withdrawn Sep-12 invert. Fusion pose sane; scale/pieces/steel audit
+  belongs to 04.
+- All four boxes met: single pinned training ✓ (30761983, 7k+30k saved);
+  single same-voxel masked extraction ✓ (block/memory figures in
+  `qgs_extract_a03_30829214.log`); outputs archived without overwrite ✓
+  (`train/ours_30000/`, run-separated logs); no unapproved submits ✓
+  (extraction approved 2026-09-20). No ceiling crash to record ✓ (N/A).
+- Next: ticket 04 — fetch `fuse_post.ply` to `artifacts/`, same-ruler relief
+  vs PGSR-A, ridge-resolving close-ups, steel cm², depth disagreement, R1
+  write-back with a `Needs-eye:` close.
 
 ## Progress 2026-09-20 (extraction submitted)
 
