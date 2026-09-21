@@ -34,11 +34,23 @@ QGS identified 2026-09-13: Quadratic Gaussian Splatting, ICCV '25 (CAS/HKU/Sense
 
 PGSR-A control (`artifacts/review_A_stock/tsdf_fusion_post.ply`): 96,719 verts / 173,900 faces / 10 sherd-scale pieces, median triangle edge **0.77 mm** (the 0.75 mm grid, as M8 said). Rim relief character **p50 0.35 mm** RMS in an R = 1.5 mm ball (method-local Rq-like, same code reruns on QGS in 04). Steel **0.0 cm²** by component audit. Eye: coarse grid lumps with fusion holes, no 0.2 mm structure — this picture is the bar QGS must beat. Eye 2026-09-13: conservator confirms the reading — coarse blocks, edge detail not cleanly legible at this grid. PGSR-A side of the eye is closed; QGS side stages in 04. Pass/fail fraction deferred to 04 (one mesh alone has no reference to be "within" anything). Bundle rename 2026-09-14: image-only eye bundle moved out of the viewer registry (`visual-qa/preview/qgs_edge_baseline_r1.json`) so rescan lists only loadable 3D pairs; ticket 02/04 `Needs-eye:` refs updated, no figures changed.
 
-## Pin 2026-09-13 (ticket 01, GO — no GPU spent)
+## Amendment 2026-09-21 (ticket 04 audit — mask premise false, A/B invalid)
+
+- The NATIVE GO above is struck: `gt_alpha_mask` is never assigned anywhere
+  in the pinned QGS repo outside the `Camera` constructor default `None`, so
+  the fusion gate in `extract_mesh_bounded()` cannot fire and `get_mask()`
+  is wired to nothing on the fusion path. `use_alpha: true` in the run
+  config was a switch connected to nothing.
+- The finished 30k training stands (masking gates fusion only); only the
+  extraction must be redone through a PGSR-side port driver. Required state
+  is PORT (ticket 01's named-but-untaken option), not NATIVE. No box ticks
+  change — the unmasked mesh scores nothing.
+
+## Pin 2026-09-13 (ticket 01, GO — no GPU spent; mask line amended 2026-09-21)
 
 - QGS `74d05c945e99fcaef7afe5a8831903be71ad9b55` (master HEAD via `git ls-remote`). PGSR stock HEAD `de24f1a38b350387e8d8fe381b2cd70c1ae946e7` unchanged (matches `provenance_A03.json` `stock_pin`); community pin `8777d4b` unchanged.
 - Control: PGSR variant-A frame-correct stock-posed mesh (`PGSR/artifacts/review_A_stock/tsdf_fusion_post.ply`, from regs-off 30k `output/A03_noreg`; 96,719 verts, 10 forced pieces, 0.75 mm grid). Sep-12 fork-posed mesh excluded as INVALID displaced.
 - Dataset: `A03_sherds` — 164 RGB JPEG 3200×2133, `images_rgba` baked (alpha mean ~2.3%), COLMAP sparse 164 registered. Full resolution, holdout every 8th view (`dataset.eval: True`, `hold: 8`).
 - Extraction parity: voxel 0.002 units (0.75 mm via 373.73 mm/unit sidecar), sdf_trunc 5×voxel, depth_trunc 5.0 (QGS 3.0 default not used — far-side content reaches 4.81), num_cluster 10.
 - Run values: 30k iters, one seed; `densify_grad_threshold 0.5`, `lambda_dist 50000`, `lambda_normal 0.05`, curvature losses 0, `depth_ratio 0.0` default; multi-view weights from iter 7000 (PGSR-regs-onset watch, not pre-disabled).
-- Mask NATIVE GO: `dataset.use_alpha: True` + `images_rgba` (alpha-gated depth zeroing in `reconstruction()` and `extract_mesh_bounded()`). Layout accommodation: cluster dataset is flat `sparse/` (no `sparse/0`), QGS reads `sparse/0` — trial stages `sparse/0` compat symlinks, shared data untouched. Train entry: stock `train.py` `__main__` has the `training()` call commented out (eval-only as shipped), so a PGSR-side driver imports `training()` — no QGS fork change. Env: fresh conda env per QGS `environment.yml` (python 3.9.19, torch 2.2.2, open3d 0.18) + `diff-quadratic-rasterization` and `simple-knn` submodule builds, then import probe.
+- Mask NATIVE GO: `dataset.use_alpha: True` + `images_rgba` (alpha-gated depth zeroing in `reconstruction()` and `extract_mesh_bounded()`). **AMENDED 2026-09-21 — REFUTED, now PORT-required (see Amendment below).** Layout accommodation: cluster dataset is flat `sparse/` (no `sparse/0`), QGS reads `sparse/0` — trial stages `sparse/0` compat symlinks, shared data untouched. Train entry: stock `train.py` `__main__` has the `training()` call commented out (eval-only as shipped), so a PGSR-side driver imports `training()` — no QGS fork change. Env: fresh conda env per QGS `environment.yml` (python 3.9.19, torch 2.2.2, open3d 0.18) + `diff-quadratic-rasterization` and `simple-knn` submodule builds, then import probe.
