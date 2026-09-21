@@ -56,7 +56,21 @@
   keeps the QGS checkout at pin, reuses the finished 30k model, and costs
   one ~5-minute extraction. R1's pin section is amended from NATIVE GO to
   PORT-required; ticket 01's mask box reopens as PORT.
-- R1 boxes stay unticked; no relief figure is scored off the unmasked mesh.
+## Retry 2026-09-21 (PORT driver built, masked extraction submitted)
+
+- Conservator: "let's try again" — approved recovery as proposed (port driver
+  + re-extract, no retraining).
+- `scripts/qgs_run_extract_masked.py` (new): mirrors `render.py`'s mesh path,
+  wires `gt_alpha_mask` from each camera's `get_mask` before
+  `reconstruction()`; refuses on non-RGBA pixels, foreground outside
+  (0.001, 0.5), mask/depth shape mismatch, config parity drift, or existing
+  output. Writes `fuse_masked.ply` (+ `_post`), never touches the unmasked
+  pair. `slurm/qgs_extract_masked_a03.slurm` (new): same env/guard/trap
+  pattern. Both syntax-checked; QGS checkout untouched at pin.
+- Batch **30887248** submitted (scheduler-bumped to gpu-a100 as before).
+  Laptop poll watching (1-min interval). On success: fetch
+  `fuse_masked_post.ply`, component audit (tray must be gone, sherd count vs
+  10), then the 04 scoring seam.
 
 - [ ] Same-ruler relief comparison on the break-face ribbon: QGS vs PGSR-A fraction within ~1 mm (cutoff stated), cross-view depth disagreement in mm for QGS on the same capture, steel remaining in cm² on the QGS mesh
 - [ ] QGS-vs-PGSR-A break-face close-ups at ~0.2 mm-resolving scale exist before any score; per-vertex unbinned views where a proxy keeps failing
