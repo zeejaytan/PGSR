@@ -47,6 +47,10 @@ eval "$(conda shell.bash hook)"
 set +u
 conda activate "$ENV_PREFIX"
 set -u
+# Job 30887248 died in `import sqlite3` (via mediapy→IPython): the module
+# stack's GCC 11.3.0 libstdc++ (first on LD_LIBRARY_PATH) lacks CXXABI_1.3.15
+# that the env's own libicui18n needs. Prefer the env's newer libstdc++.
+export LD_LIBRARY_PATH="$ENV_PREFIX/lib:${LD_LIBRARY_PATH:-}"
 
 [[ -d "$OUT_DIR/point_cloud/iteration_30000" ]] || {
     echo "No finished 30k model at $OUT_DIR -- refusing" >&2; exit 1; }
