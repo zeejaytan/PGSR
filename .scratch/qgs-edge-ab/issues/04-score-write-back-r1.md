@@ -71,6 +71,14 @@
   Laptop poll watching (1-min interval). On success: fetch
   `fuse_masked_post.ply`, component audit (tray must be gone, sherd count vs
   10), then the 04 scoring seam.
+- 30887248 FAILED in 28 s, exit 1 — library load, not science: `import
+  sqlite3` (via mediapy→IPython in the `mesh_utils` import chain) picked the
+  module stack's GCC 11.3.0 libstdc++ off `LD_LIBRARY_PATH`, which lacks the
+  CXXABI the env's own libicu needs. Stock `render.py` survived this on its
+  node; the masked driver met a node where it doesn't. Fix committed
+  (`fed0e83`): prepend `$ENV_PREFIX/lib` (ships libstdc++ 6.0.36, carries the
+  CXXABI) after activation — deterministic on any node. Resubmitted as
+  **31200829** with laptop poll (1-min).
 
 - [ ] Same-ruler relief comparison on the break-face ribbon: QGS vs PGSR-A fraction within ~1 mm (cutoff stated), cross-view depth disagreement in mm for QGS on the same capture, steel remaining in cm² on the QGS mesh
 - [ ] QGS-vs-PGSR-A break-face close-ups at ~0.2 mm-resolving scale exist before any score; per-vertex unbinned views where a proxy keeps failing
