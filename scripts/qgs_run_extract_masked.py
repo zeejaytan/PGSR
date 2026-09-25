@@ -97,13 +97,14 @@ def main() -> int:
     extractor.reconstruction(cams)
 
     # Shape guard: a mask that doesn't match its depth map would gate the
-    # wrong pixels. Refuse instead of fusing garbage.
+    # wrong pixels. Compare squeezed shapes (masks carry a leading singleton
+    # dim). Refuse instead of fusing garbage.
     for i, cam in enumerate(cams):
-        dm = extractor.depthmaps[i]
-        if tuple(cam.gt_alpha_mask.shape) != tuple(dm.shape[-2:]) and \
-                cam.gt_alpha_mask.shape != dm.squeeze().shape:
-            print(f"camera {i}: mask {tuple(cam.gt_alpha_mask.shape)} vs "
-                  f"depth {tuple(dm.shape)} -- refusing", file=sys.stderr)
+        mshape = tuple(cam.gt_alpha_mask.squeeze().shape)
+        dshape = tuple(extractor.depthmaps[i].squeeze().shape)
+        if mshape != dshape:
+            print(f"camera {i}: mask {mshape} vs depth {dshape} -- refusing",
+                  file=sys.stderr)
             return 1
     print("mask/depth shapes agree")
 
