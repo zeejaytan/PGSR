@@ -79,6 +79,13 @@
   (`fed0e83`): prepend `$ENV_PREFIX/lib` (ships libstdc++ 6.0.36, carries the
   CXXABI) after activation — deterministic on any node. Resubmitted as
   **31200829** with laptop poll (1-min).
+- 31200829 FAILED in 4m33s, exit 1 — my own shape guard refused, correctly
+  in spirit but wrong in comparison: mask `(1, 2133, 3200)` vs depth
+  `(2133, 3200)` differ only by a leading singleton dim the upstream gate
+  broadcasts over fine. Positive news inside the failure: reconstruction ran
+  all 143 train cameras and the foreground-fraction guard passed, so the
+  alpha data is sane. Fix committed (`2a954af`): squeezed shape comparison.
+  Resubmitted as **31276616** with laptop poll (1-min).
 
 - [ ] Same-ruler relief comparison on the break-face ribbon: QGS vs PGSR-A fraction within ~1 mm (cutoff stated), cross-view depth disagreement in mm for QGS on the same capture, steel remaining in cm² on the QGS mesh
 - [ ] QGS-vs-PGSR-A break-face close-ups at ~0.2 mm-resolving scale exist before any score; per-vertex unbinned views where a proxy keeps failing
