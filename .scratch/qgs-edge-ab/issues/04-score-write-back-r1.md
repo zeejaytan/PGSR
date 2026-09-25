@@ -86,6 +86,28 @@
   all 143 train cameras and the foreground-fraction guard passed, so the
   alpha data is sane. Fix committed (`2a954af`): squeezed shape comparison.
   Resubmitted as **31276616** with laptop poll (1-min).
+- Course correction (conservator direction): batch loop abandoned, holder
+  31276689 opened (short, CPUS=8 MEM=110G from 30829214's MaxRSS 89 GB).
+  In-holder masked extraction COMPLETED — then the IndexError on the
+  upstream gate (`depth[mask<0.5]` with (1,H,W) mask vs 2-D depth: dead code
+  upstream, never ran with a real mask). Fix committed (`63a59b7`): squeeze
+  on attach. Re-ran in-holder → `fuse_masked.ply` written, BUT raw/post
+  counts and bounds bit-match the unmasked run except colors — geometry
+  identical, so the mask changed nothing fused.
+- Why (probed, not guessed): `reconstruction()` ALREADY gates via
+  `viewpoint_cam.get_mask` directly (mesh_utils.py:134-135) — the
+  `gt_alpha_mask` gate in `extract_mesh_bounded` is a redundant second lock
+  with no key upstream. Plumbing verified (`dataset.use_alpha` → cam_info →
+  Camera; undistorted pixels RGBA binary alpha). Mask-vs-photo overlay
+  (`artifacts/mask_probe.png`): correct — sherds kept, tray cut. Single-view
+  depth probe (`scripts/probe_mask_depth.py`): kept 2.0%, gated depths
+  2.94–4.44 sane, viz shows clean sherd-shaped gradients.
+  Backprojection probe (`scripts/probe_backproject_qgs.py`): masked depths
+  land [-0.74..0.54, -0.61..0.70, -0.83..0.42] — on the training points'
+  neighborhood. **Depths, masks, extrinsics all acquitted; the curtain is
+  built by TSDF from correct inputs, or the model depths disagree across
+  views (floaters).** Next: cross-view depth disagreement (already a 04
+  scoring item) decides method-vs-integration before any relief figure.
 - 2026-09-25 course correction (conservator direction): **batch loop
   abandoned for this step.** Three batch failures in a row, each a seconds-
   to-minutes fault after a queue wait, is exactly the debugging loop the
