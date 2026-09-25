@@ -1,6 +1,6 @@
 # R1 — Does QGS preserve break-face edges beyond PGSR under PGSR-identical conditions?
 
-**Status:** open · **Blocked by:** none (M8 answered NO as mesh route 2026-09-13; this is the follow-on) · **Effort:** days, not weeks — one capture, one seed
+**Status:** closed NO 2026-09-25 (ticket 04; witnessed eye pending as the closing note) · **Blocked by:** none · **Effort:** days, not weeks — one capture, one seed
 
 ## Why it matters
 
@@ -34,7 +34,33 @@ QGS identified 2026-09-13: Quadratic Gaussian Splatting, ICCV '25 (CAS/HKU/Sense
 
 PGSR-A control (`artifacts/review_A_stock/tsdf_fusion_post.ply`): 96,719 verts / 173,900 faces / 10 sherd-scale pieces, median triangle edge **0.77 mm** (the 0.75 mm grid, as M8 said). Rim relief character **p50 0.35 mm** RMS in an R = 1.5 mm ball (method-local Rq-like, same code reruns on QGS in 04). Steel **0.0 cm²** by component audit. Eye: coarse grid lumps with fusion holes, no 0.2 mm structure — this picture is the bar QGS must beat. Eye 2026-09-13: conservator confirms the reading — coarse blocks, edge detail not cleanly legible at this grid. PGSR-A side of the eye is closed; QGS side stages in 04. Pass/fail fraction deferred to 04 (one mesh alone has no reference to be "within" anything). Bundle rename 2026-09-14: image-only eye bundle moved out of the viewer registry (`visual-qa/preview/qgs_edge_baseline_r1.json`) so rescan lists only loadable 3D pairs; ticket 02/04 `Needs-eye:` refs updated, no figures changed.
 
-## Amendment 2026-09-21 (ticket 04 audit — mask premise false, A/B invalid)
+## Verdict 2026-09-25: NO — method failed on this material (kind 1 of 3)
+
+- Under PGSR-identical conditions (164 views, full 3200×2133, 30k iters one
+  seed, voxel 0.002 = 0.75 mm, sdf 5×voxel, depth_trunc 5.0, 10 clusters,
+  native alpha fusion masks via PGSR-side port), QGS yields no scorable
+  mesh: a scene-spanning ragged curtain (269k verts, 300–620 mm) + 4 of 10
+  sherds, vs PGSR-A's clean 10 sherds at 0.0 cm² steel. No relief figure
+  exists to compare — the break-face boxes are ruled out, not unticked.
+- Mechanism, measured in mm (`scripts/probe_depth_disagree_qgs.py`, 12 view
+  pairs, 560k shared px): cross-view depth disagreement p50 **3.96 mm**,
+  mean **86.5 mm**, p90 **345 mm** against the M1 ~1 mm bar. Masks, depths,
+  extrinsics each acquitted by probe; the model is view-inconsistent, and
+  143 disagreeing views fuse into curtains. The authors' sparse-region
+  overfitting warning covers exactly this.
+- Audit trail: NATIVE mask premise refuted then repaired by port (training
+  stood, re-extraction only); masked mesh bit-identical in geometry to the
+  eye-witnessed unmasked file (colors only differ), so the 2026-09-21 eye
+  reading transfers. Per the gate: worse than the same ceiling — retire at
+  one-capture weight, no second seed/capture, no tuning arm.
+- Builder's note (for the next trial that ports a foreign fusion path):
+  `gt_alpha_mask` was dead code upstream and `reconstruction()` already
+  gates via `get_mask` — read both gates before claiming a mask path; the
+  seconds-long `grep gt_alpha_mask` that settled it was never run at pin
+  time. Same lesson as the MKL guard: port the fix to every script that
+  shares the pattern, not just the one that failed.
+
+## Amendment 2026-09-21 (ticket 04 audit — mask premise false, A/B invalid; superseded by the verdict above, kept as the trail)
 
 - The NATIVE GO above is struck: `gt_alpha_mask` is never assigned anywhere
   in the pinned QGS repo outside the `Camera` constructor default `None`, so

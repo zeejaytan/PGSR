@@ -108,6 +108,25 @@
   built by TSDF from correct inputs, or the model depths disagree across
   views (floaters).** Next: cross-view depth disagreement (already a 04
   scoring item) decides method-vs-integration before any relief figure.
+- Verdict 2026-09-25 (cross-view probe `scripts/probe_depth_disagree_qgs.py`,
+  12 nearest-neighbour train pairs, 560k shared px, in-holder): disagreement
+  **p50 3.96 mm, mean 86.5 mm, p90 345 mm** — pairs range from sub-mm
+  (0→29: 0.82; 142→114: 0.20) to whole-scene (129→51: p50 419 mm on 16k px;
+  103→79: p50 212 mm). Against the M1 ~1 mm bar the model is
+  view-inconsistent by 4× at median and ~90× at mean. This is the curtain's
+  mechanism: 143 disagreeing views fused = smeared walls + only the 4
+  mutually-agreeing sherds surviving. The authors' own warning (overfitting
+  in sparse/low-texture regions) predicted exactly this.
+- **R1 verdict: NO — method failed on this material (kind 1 of 3).** Under
+  PGSR-identical conditions (same 164 views, full res, 0.75 mm grid, same
+  fusion-time masks, one seed, pinned defaults) QGS yields no scorable mesh:
+  curtain + 4/10 sherds vs PGSR-A's clean 10. Not the same ceiling — worse:
+  no mesh to score relief on. Per R1's gate: retire at one-capture weight,
+  no second seed/capture. Tuning (regs/curvature knobs) is out of scope by
+  the pin. Holder 31276689 released after the probe (no idle burn).
+- Closes on witnessed look + conservator note (this ticket's Needs-eye):
+  masked single staged (`qgs_A03_masked_single`), viewer serving; conservator
+  confirms the curtain/4-sherd reading on the masked file, verdict ticks R1.
 - 2026-09-25 course correction (conservator direction): **batch loop
   abandoned for this step.** Three batch failures in a row, each a seconds-
   to-minutes fault after a queue wait, is exactly the debugging loop the
