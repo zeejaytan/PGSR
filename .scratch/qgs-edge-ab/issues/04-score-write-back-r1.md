@@ -86,6 +86,16 @@
   all 143 train cameras and the foreground-fraction guard passed, so the
   alpha data is sane. Fix committed (`2a954af`): squeezed shape comparison.
   Resubmitted as **31276616** with laptop poll (1-min).
+- 2026-09-25 course correction (conservator direction): **batch loop
+  abandoned for this step.** Three batch failures in a row, each a seconds-
+  to-minutes fault after a queue wait, is exactly the debugging loop the
+  held allocation exists for (`docs/agents/slurm.md`) — the lead should have
+  switched after the second failure instead of treating each as "one more
+  batch". 31276616 cancelled while PENDING (stale poll confirms CANCELLED,
+  no work lost). Holder requested on `gpu-a100-short` (CPUS=8, MEM=110G —
+  sized from 30829214's measured MaxRSS 89 GB, stays under the ~124G bump
+  threshold; 4h hold), step 1 = the masked driver via `gpu_session.sh run`.
+  Any further fault gets fixed and retried inside the holder, no requeue.
 
 - [ ] Same-ruler relief comparison on the break-face ribbon: QGS vs PGSR-A fraction within ~1 mm (cutoff stated), cross-view depth disagreement in mm for QGS on the same capture, steel remaining in cm² on the QGS mesh
 - [ ] QGS-vs-PGSR-A break-face close-ups at ~0.2 mm-resolving scale exist before any score; per-vertex unbinned views where a proxy keeps failing
