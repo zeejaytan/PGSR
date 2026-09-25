@@ -45,6 +45,11 @@ def main() -> int:
                             config.optimizer, bg_color=bg)
 
     # Nearest-neighbour pairs by camera translation direction.
+    def as_np(x):
+        if torch.is_tensor(x):
+            return x.detach().cpu().numpy()
+        return np.asarray(x)
+
     def _t(cam):
         return as_np(cam.world_view_transform)[3, :3]
 
@@ -64,14 +69,8 @@ def main() -> int:
         mask = cam.get_mask.squeeze().float().cpu().numpy()
         return depth, mask
 
-    def as_np(x):
-        if torch.is_tensor(x):
-            return x.detach().cpu().numpy()
-        return np.asarray(x)
-
-    def cam_mats(cam):
-        E = as_np(cam.world_view_transform)  # noqa: F841 (kept for clarity)
-        return E
+    def cam_mats_unused(cam):
+        return as_np(cam.world_view_transform)
 
     all_abs = []
     for (ia, ib) in pairs:
