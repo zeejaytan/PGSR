@@ -82,7 +82,11 @@ def main() -> int:
                   file=sys.stderr)
             return 1
         fg_fracs.append(float((mask >= 0.5).float().mean()))
-        cam.gt_alpha_mask = mask
+        # Squeeze the leading singleton dim: the upstream gate
+        # (`depth[(mask < 0.5)] = 0`) boolean-indexes a 2-D depth map, which a
+        # (1, H, W) mask cannot index (IndexError — this path never ran
+        # upstream). Squeezed (H, W) gates the right pixels.
+        cam.gt_alpha_mask = mask.squeeze()
     fg = float(np.mean(fg_fracs))
     print(f"masks wired on {len(cams)} cameras, mean foreground {fg:.4f} "
           f"(min {min(fg_fracs):.4f}, max {max(fg_fracs):.4f})")
