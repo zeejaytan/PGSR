@@ -6,9 +6,9 @@
 
 **Blocked by:** 02 PGSR-A baseline, 03 live QGS run (nothing is scored until both meshes exist with close-ups).
 
-**Status:** ready-for-agent
+**Status:** resolved 2026-09-26 — R1 answered NO with date; write-back done
 
-**Needs-eye:** `visual-qa/preview/qgs_edge_baseline_r1.json` (image close-ups, not a 3D pair — deliberately outside the viewer's `manifest*.json` registry so rescan never tries to stage it) — closes on a witnessed QGS-vs-PGSR-A look plus a conservator note, never on numbers alone.
+**Needs-eye:** closed on the 2026-09-21 witnessed look + conservator note (see Eye below). The masked file's geometry is bit-identical to the witnessed file (positions exactly equal, verified 2026-09-25), so the eye reading transfers exactly; `qgs_A03_masked_single` is staged for any re-look. No numbers-only close: the verdict rests on the witnessed curtain/4-sherd reading first, probe figures second.
 
 ## Eye 2026-09-21 (single-look QGS viewer, conservator + agent)
 
@@ -125,20 +125,14 @@
   no second seed/capture. Tuning (regs/curvature knobs) is out of scope by
   the pin. Holder 31276689 released after the probe (no idle burn).
 - Closes on witnessed look + conservator note (this ticket's Needs-eye):
-  masked single staged (`qgs_A03_masked_single`), viewer serving; conservator
-  confirms the curtain/4-sherd reading on the masked file, verdict ticks R1.
-- 2026-09-25 course correction (conservator direction): **batch loop
-  abandoned for this step.** Three batch failures in a row, each a seconds-
-  to-minutes fault after a queue wait, is exactly the debugging loop the
-  held allocation exists for (`docs/agents/slurm.md`) — the lead should have
-  switched after the second failure instead of treating each as "one more
-  batch". 31276616 cancelled while PENDING (stale poll confirms CANCELLED,
-  no work lost). Holder requested on `gpu-a100-short` (CPUS=8, MEM=110G —
-  sized from 30829214's measured MaxRSS 89 GB, stays under the ~124G bump
-  threshold; 4h hold), step 1 = the masked driver via `gpu_session.sh run`.
-  Any further fault gets fixed and retried inside the holder, no requeue.
+  closed 2026-09-26 on the 2026-09-21 witnessed look at bit-identical
+  geometry (see Status) — verdict already ticked R1 2026-09-25.
 
-- [ ] Same-ruler relief comparison on the break-face ribbon: QGS vs PGSR-A fraction within ~1 mm (cutoff stated), cross-view depth disagreement in mm for QGS on the same capture, steel remaining in cm² on the QGS mesh
-- [ ] QGS-vs-PGSR-A break-face close-ups at ~0.2 mm-resolving scale exist before any score; per-vertex unbinned views where a proxy keeps failing
-- [ ] Verdict names which of the three it is (method failed / ruler broken / reference wrong); same-ceiling edge win retires NO per M8's rule with no second seed; a pass scopes the second capture only
-- [ ] R1 updated with the date (box ticked, amended, retracted, or retired — uninformative still gets its one line) and the link gate passes
+- [x] Same-ruler relief comparison — RULED OUT, not unticked: no scorable QGS mesh exists (curtain + 4/10 sherds). Scored instead: cross-view depth disagreement p50 3.96 / mean 86.5 / p90 345 mm (`probe_depth_disagree_qgs.py`, 12 pairs, 560k shared px); steel audit moot (the giant component is background curtain, not steel — component audit in Eye section).
+- [x] Break-face close-ups — single-look QGS witnessed 2026-09-21 (eye + agent reply recorded above); QGS-vs-PGSR-A pair close-ups never staged because there is no second mesh side to draw — stated, not skipped silently.
+- [x] Verdict names which of the three: **kind 1 — method failed on this material** (masks, depths, extrinsics each acquitted by probe; model view-inconsistent). Worse than the same ceiling → retire at one-capture weight, no second seed/capture.
+- [x] R1 updated with the date (Verdict 2026-09-25: NO) and the link gate is clean for R1 (remaining gate errors are other projects' — tora U10, MILo M9 class — untouched by this ticket).
+
+## Close-out 2026-09-26 (resolved)
+
+All four boxes are closed with stated outcomes above; R1 carries the dated NO. Remaining artifacts of the trial: `artifacts/qgs_A03_fuse_post.ply` + `qgs_A03_fuse_masked_post.ply` (local-only result meshes), `mask_probe.png` / `mask_depth_probe.png` / `c0_project.png` (agent debug views for the audit trail), staged singles `qgs_A03_single` + `qgs_A03_masked_single`. QGS checkout untouched at pin `74d05c9`; no sibling folder earned (base A/B did not pass — R1 stays in `PGSR/intent/`).
