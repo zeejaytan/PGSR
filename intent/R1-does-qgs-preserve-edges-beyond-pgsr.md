@@ -1,6 +1,6 @@
 # R1 — Does QGS preserve break-face edges beyond PGSR under PGSR-identical conditions?
 
-**Status:** closed NO 2026-09-25 (ticket 04; witnessed eye pending as the closing note) · **Blocked by:** none · **Effort:** days, not weeks — one capture, one seed
+**Status:** closed NO 2026-09-25 (ticket 04; resolved with write-up 2026-09-26) · **Blocked by:** none · **Effort:** days, not weeks — one capture, one seed
 
 ## Why it matters
 
