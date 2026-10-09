@@ -12,3 +12,6 @@ artifacts/
 
 # Slurm stdout from accidental local runs.
 *.out
+
+# Python bytecode cache.
+__pycache__/
