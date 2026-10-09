@@ -10,7 +10,8 @@ the sherd mesh route at the resolution a break face needs? — and its tickets c
 
 | # | Question | Status | Blocked by |
 |---|---|---|---|
-| [R1](R1-does-qgs-preserve-edges-beyond-pgsr.md) | Does QGS preserve break-face edges beyond PGSR under PGSR-identical conditions? | open — one capture, one seed, PGSR variant A as control | M8 (answered NO 2026-09-13, follow-on) |
+| [R1](R1-does-qgs-preserve-edges-beyond-pgsr.md) | Does QGS preserve break-face edges beyond PGSR under PGSR-identical conditions? | closed NO 2026-09-25 | M8 (answered NO 2026-09-13, follow-on) |
+| [R2](R2-does-lama-fill-recover-density-without-moving-break.md) | Does full-res LaMa fill recover sherd density without moving the break, with generated flagged in the PLY? | open — one sherd, one seed, LaMa-inpainted vs unmasked control | none (related: M5, M8, U14; backups GScream/InFusion parked) |
 
 This folder is **state, not a log**. Edit a line when it turns out wrong; git holds
 the history. Runs live in `docs/notes/`.
