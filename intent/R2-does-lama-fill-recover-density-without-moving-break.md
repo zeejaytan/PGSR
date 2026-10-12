@@ -6,10 +6,10 @@
 
 LaMa `https://github.com/advimman/lama` HEAD `786f5936b27fb3dacd2b1ad799e4de968ea697e7`; weights `big-lama` (`https://huggingface.co/smartywu/big-lama/resolve/main/big-lama.zip`). One sherd **A31** (33 views, 3200x2133); control `/data/gpfs/projects/punim2657/MILo/data/17062025/A03_sherds/` (164 views, `llffhold` 8). Both arms: 30k iters, seed 22, extraction voxel 0.002 = 0.75 mm, sdf_trunc 5×voxel, depth_trunc 5.0, 10 clusters. Env `/data/gpfs/projects/punim2657/MILo/envs/milo` + additive `albumentations`. Inpaint mask = complement of `A03_erode0` tight masks, 0 px dilation, per-view full-res, break and jaw-contact excluded. Face tolerance for ticket 02 (decided 2026-10-12 interview): **0.5 mm** on a quiet flat-wall patch, single representative A31 view first; deviation above this stops the trial and is recorded here with a date. Full record: `PGSR/.scratch/lama-face-fill/issues/01-pin-record.md`.
 
-## Ticket 02 outcome (2026-10-13 — photo seam; trial paused before clamp)
+## Ticket 02 outcome (2026-10-13 — photo seam; conservator proceeded to clamp)
 
 - Single-view gate on A31_1116: face-only 48px patch (cx1556 cy320, ≈10.57 mm side), pinned big-lama fill, lead-verified gray mean|Δ| 5.51 / rms 6.98 (N=2304 px), outside-box change 0, close-ups faithful (slightly softer, no invention). Full record: `PGSR/.scratch/lama-face-fill/issues/02-heldout-patch-check.md`; scorer `PGSR/scripts/measure_patch_deviation.py`; close-ups `PGSR/artifacts/lama02_eye/gate02_*`.
-- Lead ruling: photo-gate PASSES fail-fast (no photographic stop signal); the photo-proxy "1.215 mm" (gray×mm/px) does NOT bind against the 0.5 mm surface tolerance — it measures no surface. No MISS recorded. Binding check of the same 0.5 mm moves to the fused-mesh scoring seam (tickets 03/04). No clamp pixels touched. Paused pending conservator eye note.
+- Lead ruling: photo-gate PASSES fail-fast (no photographic stop signal); the photo-proxy "1.215 mm" (gray×mm/px) does NOT bind against the 0.5 mm surface tolerance — it measures no surface. No MISS recorded. Binding check of the same 0.5 mm moves to the fused-mesh scoring seam (tickets 03/04). No clamp pixels touched at gate time. Conservator eye note 2026-10-13: **proceed to clamp**.
 
 ## Where it stands
 

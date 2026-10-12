@@ -6,8 +6,7 @@
 
 **Blocked by:** None (can start immediately).
 
-**Status:** done
-**Working in:** DSH lead session (2026-10-12)
+**Status:** resolved
 
 ## Pin record (2026-10-12, verified this session)
 

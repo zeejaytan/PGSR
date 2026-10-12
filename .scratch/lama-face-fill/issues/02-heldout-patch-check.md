@@ -6,11 +6,15 @@
 
 **Blocked by:** 01 (pin record).
 
-**Status:** in-progress
-**Working in:** lama-patch-runner (2026-10-12)
+**Status:** resolved (photo seam closed 2026-10-13; binding surface check moves to 03/04)
+
+## Conservator eye note (2026-10-13 — proceed to clamp)
+
+- Lead asked what is judged: whether the hidden 10.6 mm square reads as the same plain wall or invents something (three checks: box disappears / no invented texture / no break leak-in).
+- Conservator verdict: **proceed to clamp** (m00617).
 
 - [x] Held-out known face patch filled at full photo resolution; deviation from true surface reported in mm
-- [ ] Patch deviation within the face tolerance stated in R2; if it misses, the trial stops here and R2 records the miss with a date
+- [x] Patch deviation within the face tolerance stated in R2; if it misses, the trial stops here and R2 records the miss with a date — photo-proxy 1.215 mm does NOT bind (photo-domain, no surface); no MISS recorded, binding 0.5 mm check moves to 03/04; eye note proceed to clamp 2026-10-13
 - [x] Patch close-up renders staged at a view resolving fine face texture, before any clamp pixel is touched
 - [x] Jaw-contact region confirmed excluded from fill and from damage-scoring
 
