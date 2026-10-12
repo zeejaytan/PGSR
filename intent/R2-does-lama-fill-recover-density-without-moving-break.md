@@ -2,6 +2,10 @@
 
 **Status:** open · **Blocked by:** none · **Effort:** days — one sherd, one seed, A/B on existing data
 
+## Pin (2026-10-12, ticket 01 — verified before any job)
+
+LaMa `https://github.com/advimman/lama` HEAD `786f5936b27fb3dacd2b1ad799e4de968ea697e7`; weights `big-lama` (`https://huggingface.co/smartywu/big-lama/resolve/main/big-lama.zip`). One sherd **A31** (33 views, 3200x2133); control `/data/gpfs/projects/punim2657/MILo/data/17062025/A03_sherds/` (164 views, `llffhold` 8). Both arms: 30k iters, seed 22, extraction voxel 0.002 = 0.75 mm, sdf_trunc 5×voxel, depth_trunc 5.0, 10 clusters. Env `/data/gpfs/projects/punim2657/MILo/envs/milo` + additive `albumentations`. Inpaint mask = complement of `A03_erode0` tight masks, 0 px dilation, per-view full-res, break and jaw-contact excluded. Full record: `PGSR/.scratch/lama-face-fill/issues/01-pin-record.md`.
+
 ## Why it matters
 
 Masked training drains the clay (M5: 222,678 → 18,443 Gaussians, 2.6M → 276k verts) and fusion-time masking lands on a 0.75 mm grid (M8). The clamp covers face only, never the break, so a face fill cannot fake a join — but the open question is whether feeding LaMa-inpainted face pixels recovers density as clay or as smooth fake, and whether the break stays untouched. This decides if LaMa earns a place in the capture chain or stays a visualisation aid. GScream/InFusion are recorded backups, untested.
