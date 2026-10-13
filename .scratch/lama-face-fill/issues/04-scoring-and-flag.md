@@ -4,7 +4,9 @@
 
 **Answers:** R2
 
-**Blocked by:** 03 (training A/B density figures).
+**Blocked by:** 03 (training A/B density figures) — extraction + first-look render done 2026-10-14; inputs ready.
+
+**Lead note (read before starting):** 03's auto-crop close-ups missed the sherd (framed fusion-boundary tears at different spots per arm) — crop at the sherd's known 3D location from the photo masks/COLMAP frustums, and attach scale provenance (A03 373.733 mm/unit is assumed, unproven for A31) before any number counts. Gross fusion sanity confirmed; no face verdict stands yet.
 
 **Status:** ready-for-agent
 
