@@ -1,7 +1,7 @@
 #!/bin/bash
 #SBATCH --job-name=pgsr-render-edge-ab
 #SBATCH --account=punim2657
-#SBATCH --partition=cascade
+#SBATCH --partition=sapphire
 #SBATCH --ntasks=1
 #SBATCH --cpus-per-task=8
 #SBATCH --mem=64G
