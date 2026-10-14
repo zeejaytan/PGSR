@@ -78,5 +78,4 @@ Unverified: whether a clean-room venv (not the shared milo env) could satisfy th
 - Scorer `PGSR/scripts/measure_patch_deviation.py` (116 lines) APPROVED as the photo-seam instrument: refuses loudly on bad inputs, states its own proxy limit in its `note` field. Jaw-contact exclusion confirmed (score N = box pixels only).
 - Wrap-up (runner 2026-10-13): cpu-session holder 32798559 released; shared milo pristine (numpy 1.26.4 + cv2 4.11.0, albumentations absent); jobs 32801872 CANCELLED / 32802000 FAILED 1:0 00:00:10 / 32802357 COMPLETED 0:0 00:02:34; `claude-rc` 32754924 untouched.
 
-**Status:** in-progress (photo seam done; mesh seam + eye note outstanding)
-**Working in:** lead (2026-10-13)
+**Status:** resolved (photo seam closed 2026-10-13; mesh seam closed 2026-10-14 via 04 honest-negative; witnessed note in 05)

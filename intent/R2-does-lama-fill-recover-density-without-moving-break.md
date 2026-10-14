@@ -1,6 +1,6 @@
 # R2 — Does full-res LaMa fill recover sherd density without moving the break, with generated flagged in the PLY?
 
-**Status:** open · **Blocked by:** none · **Effort:** days — one sherd, one seed, A/B on existing data
+**Status:** closed-uninformative · answered 2026-10-14 (see outcome below) · **Effort:** days — one sherd, one seed, A/B on existing data
 
 ## Pin (2026-10-12, ticket 01 — verified before any job)
 
@@ -11,12 +11,17 @@ LaMa `https://github.com/advimman/lama` HEAD `786f5936b27fb3dacd2b1ad799e4de968e
 - Single-view gate on A31_1116: face-only 48px patch (cx1556 cy320, ≈10.57 mm side), pinned big-lama fill, lead-verified gray mean|Δ| 5.51 / rms 6.98 (N=2304 px), outside-box change 0, close-ups faithful (slightly softer, no invention). Full record: `PGSR/.scratch/lama-face-fill/issues/02-heldout-patch-check.md`; scorer `PGSR/scripts/measure_patch_deviation.py`; close-ups `PGSR/artifacts/lama02_eye/gate02_*`.
 - Lead ruling: photo-gate PASSES fail-fast (no photographic stop signal); the photo-proxy "1.215 mm" (gray×mm/px) does NOT bind against the 0.5 mm surface tolerance — it measures no surface. No MISS recorded. Binding check of the same 0.5 mm moves to the fused-mesh scoring seam (tickets 03/04). No clamp pixels touched at gate time. Conservator eye note 2026-10-13: **proceed to clamp**.
 
+## Ticket 03/04 outcome (2026-10-14 — mesh seam; CAME BACK UNINFORMATIVE)
+
+Both arms trained to 30k iters and fused cleanly at the stock grid, but neither arm yields a measurable sherd face: the cleanup pass deleted the sherd region from both meshes (hole at the sherd, worse in control), and the raw meshes hold only scattered fragments at the right place (mask-interior points land on the photographed face region yet form no surface in 3-D, faces/verts ~0.47 both arms, eye-confirmed). The scored boxes (break arc, wall noise, flag run) were REFUSED — numbers on fragments would be fabrication. The LaMa-vs-control question is unanswerable from this trial through no fault of either arm. Full record: `PGSR/.scratch/lama-face-fill/issues/03-training-ab-density.md`, `.../04-scoring-and-flag.md` (resolved honest-negative); evidence `PGSR/artifacts/edge_04c/` + `.../edge_04d/`.
+
 ## Where it stands
 
-The fill software reproduced a hidden patch of plain pot wall faithfully at photo level — same tone and grain, slightly softer, nothing invented. The photo-level difference (about 5 brightness steps out of 255) cannot be read as millimetres of surface error: no 3-D surface exists at this stage to measure against. So this gate passes its narrow purpose (no photographic stop signal) without passing or failing the 0.5 mm surface limit — that check moves to the mesh stage, where the real surface gets measured. One pot, one patch, one run: a lead, not a conclusion. No clamp-area pixels touched.
-Weight: one sherd (A31), one view, one 10.6 mm patch, one run.
-Next: conservator eye note on the side-by-side close-ups, then mesh-seam instrument (tickets 03/04) for the binding 0.5 mm check.
-Picture: PGSR/artifacts/lama02_eye/gate02_side_by_side.png | Held-out wall patch: true photo (left) vs LaMa fill (right), green box 48px = 10.6 mm side
+Came back uninformative (2026-10-14). The photo gate passed, but the mesh stage produced no surface to measure in either version — fragments sit where the face should be without forming one. So none of the Done-when boxes could be ticked, and none is claimed. This retires no option and funds nothing: LaMa is neither in the capture chain nor ruled out; the next attempt needs a finer grid or different surfacing first, on an object this small and partly hidden. One sherd, one seed, one grid: a stopped trial, not a verdict on the method.
+Weight: one sherd (A31), one seed, both arms equally surfaceless at 0.75 mm grid.
+Next: finer-grid or re-surfacing pilot IF the conservator wants one — ticketed separately, never folded silently into this A/B.
+Picture: PGSR/artifacts/edge_04c/sidebyside_A31_1116.png | Fragments project onto the masked face region (LaMa left, control right) — right place
+Picture: PGSR/artifacts/edge_04d/A_lama_A31_1116_tri_0.png | Same points as shaded 3-D surface — scattered slivers, no face
 
 ## Why it matters
 

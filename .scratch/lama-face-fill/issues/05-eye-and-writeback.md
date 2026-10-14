@@ -8,8 +8,12 @@
 
 **Needs-eye:** the negative evidence staged in this ticket (side-by-side photo overlay showing fragments land on the masked face region + shaded 3D close-up showing scattered slivers, per arm); closes on witnessed look plus conservator note, never the lead's word alone.
 
-**Status:** ready-for-human
+**Status:** resolved
 
-- [ ] Negative-evidence pair witnessed by the conservator (overlay + sliver close-ups A vs B, in `artifacts/edge_04c/` + `artifacts/edge_04d/`), staged wherever the eye wants them
-- [ ] Conservator note recorded beside what it settled, with a same-round agent reply
-- [ ] R2 updated with the date: box ticked, amended, or retired — "came back uninformative" is the lead's recommendation; the conservator's note decides
+- [x] Negative-evidence pair witnessed by the conservator (overlay + sliver close-ups A vs B, in `artifacts/edge_04c/` + `artifacts/edge_04d/`), viewed directly 2026-10-14
+- [x] Conservator note recorded beside what it settled, with a same-round agent reply
+- [x] R2 updated with the date: came back uninformative (2026-10-14)
+
+**Conservator note (verbatim, 2026-10-14):** "1, yes its at the right location. 2. yes, no sherd just points, 3. also no sherds, just points." — i.e. witnessed: (1) fragments land on the masked face region; (2) LaMa close-up shows points, no sherd; (3) control close-up likewise.
+
+**Agent reply (same round):** Confirmed on all three — that is exactly the ruling's evidence chain (right place / no surface / both arms). R2 written back as "came back uninformative" with this date; no box ticked, nothing claimed. The loop is closed: the trial stopped at fusion, the refusal to score is on the record, and any finer-grid retry is a separately ticketed decision for another day.
