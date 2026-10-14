@@ -9,7 +9,9 @@
 **Lead note (read before starting):** 03's auto-crop close-ups missed the sherd (framed fusion-boundary tears at different spots per arm) — crop at the sherd's known 3D location from the photo masks/COLMAP frustums, and attach scale provenance (A03 373.733 mm/unit is assumed, unproven for A31) before any number counts. Gross fusion sanity confirmed; no face verdict stands yet.
 
 **Status:** in-progress
-**Working in:** teammate t04-scorer, phase 2a = shaded raw-mesh sherd renders (2026-10-14); scoring phase 2b gated on lead clearing those renders
+**Working in:** teammate t04-scorer, phase 2b-prime = camera-view overlay diagnostic (2026-10-14); numbers phase stays shut until lead clears it
+
+**Lead inspection of phase 2a (2026-10-14, eye on edge_04b/ shaded close-ups):** both arms show scattered slivers, no continuous face (faces/verts ~0.46: A 5235/2390, B 4442/2093 in the tight box) — worker's flat read eye-confirmed. 2b scoring NOT cleared: relief/arc numbers on fragment soup would be meaningless. Phase 2b-prime ordered instead: project raw-box verts through face-visible training cameras (e.g. A31_1116/1117) onto the photos, to decide whether the surface is genuinely absent (method failed) or badly viewed (measurement broken). Note for the record: the 0.75 mm fusion grid is ~4x coarser than the 0.2 mm ridge scale, so the ridge question is out of this grid's reach regardless.
 
 **Lead inspection of phase 1 (2026-10-14, eye on edge_04/ renders):** location ACCEPTED (X sits in a sherd-scale sparse blob, both arms). Post meshes UNSCORABLE at the sherd — eye-confirmed hole at X in both arms (white void in see_xz, larger in B): the 10-cluster filter kept tray background and dropped the sherd region in both arms. Raw meshes hold the sherd (21k/30k verts in box) but phase-1 scatters are unshaded clouds — no coherent face confirmable by eye yet. Curtain streaks are shared input-side structure (present in sparse too), not an arm difference. Consequence: ALL scoring moves to RAW meshes; phase 2a must deliver shaded-surface close-ups at tighter framing before any number is read.
 
@@ -47,3 +49,24 @@ Flat observations (descriptive only):
 - Raw meshes (`tsdf_fusion.ply`): box holds A_lama 21,194 verts / 9,962 faces, B_ctrl 30,041 verts / 14,568 faces (raw totals 10.70M / 11.03M verts). The sherd region was fused, then removed by the post small-component filter.
 - Slab test (raw box content): z spans the full box floor to ceiling both arms (10-90% thickness ~115-118 mm provisional of the 149 mm box); x-z view shows three vertical curtain-like bands, the middle one centred near X.
 - Raw scatter close-ups (both viewpoints, both arms): a diffuse point cloud roughly filling the box; no clean face surface is resolvable by eye in these views. Raw faces/verts ratio ~0.5 (fragmented).
+
+## Worker work-notes (t04-scorer, phase 2a, 2026-10-14)
+
+Task: shaded-surface (trisurf) close-ups of a tighter box on RAW meshes only. No scoring, stopped after staging.
+
+Job receipts (sapphire, CPU-only):
+- 32950874|pgsr-tight04b|FAILED|1:0|2026-10-14T15:33:08|2026-10-14T15:33:15 — submitted with a broken script (a local edit had collapsed `def qvec_to_R(q):` and its body onto one line; IndentationError before any output). No files written by the job.
+- 32950981|pgsr-tight04b|COMPLETED|0:0|2026-10-14T15:35:00|2026-10-14T15:35:16 — rerun after fix (remote py_compile verified before resubmit), `--wrap` calling `scripts/locate_a31_render_04.py work/edge_04b tsdf_fusion.ply auto trisurf`.
+
+Script change (same file, still uncommitted): new optional args `[box|auto] [style]`; `auto` derives the box from the sparse blob extent (p5-p95 spread per axis of sparse points within 0.3 units of X, x1.2 cover, ceil to 0.01, clamped to [0.10, 0.25]); `style` selects trisurf (default, restored) vs scatter. Scale bar auto: 20 mm provisional when the box is under 100 mm provisional, else 50 mm.
+
+Box (same both arms, from the shared sparse): blob near X n=6646, p5=[-0.217, 0.386, -0.285], p95=[-0.149, 0.576, -0.113], spread=[0.069, 0.190, 0.172] → box=0.230 units (~86 mm provisional). Centroid unchanged from phase 1. Tight-box contents: A_lama 5,235 verts / 2,390 faces; B_ctrl 4,442 verts / 2,093 faces.
+
+Staged files: cluster `work/edge_04b/` (`locate.json` + `A_lama/` + `B_ctrl/`, closeup_0/1 + context each). Laptop `artifacts/edge_04b/` (NEW dir; `edge_04/` untouched): `locate.json`, `A_lama/{closeup_0,closeup_1,context}.png`, `B_ctrl/{closeup_0,closeup_1,context}.png` — PNGs + KB JSON only. `scripts/locate_a31_render_04.py` updated on both sides (laptop source of truth, scp'd, remote py_compile OK).
+
+Flat observations (descriptive only):
+- Both close-up viewpoints in both arms render as scattered shaded slivers, not a continuous surface; faces/verts ratio ~0.46 in the tight box.
+- A_lama el=30/az=-60: fragments spread through the whole 86 mm box with a denser patch near the top-centre; el=10/az=30: fragments spread through the box, slightly denser toward the left half.
+- B_ctrl el=30/az=-60: fragments spread through the box with a denser vertical streak near the top-centre; el=10/az=30: fragments spread through the box with a denser patch toward the upper right.
+- Context views: the red 86 mm crop box sits at the same footprint position as the phase-1 box centre in both arms.
+- No clean face surface is resolvable by eye in any of the four shaded close-ups.
