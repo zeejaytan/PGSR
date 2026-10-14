@@ -28,6 +28,10 @@ Failure mechanism named with pictures: upstream Gaussian starvation — training
 ## Reason update (2026-10-14, ticket 07 resolved)
 
 One level deeper: seeds (6,593 at the face) and gradients (face bbox highest-energy in frame) both present — yet cover gone by iter 30k. The clearing happens DURING training (iters 500–15k) by an unidentified prune rule; needs training-time traces (possible future ticket). Author baseline: DTU object scans nearest (same mm ruler); no clamp-held small-face case in the paper — "same ruler, harder case," a domain gap, not a defect in our run. Record: `PGSR/.scratch/lama-face-fill/issues/07-why-starvation-author-baseline.md`; evidence `PGSR/artifacts/edge_07/`.
+
+## Trace update (2026-10-15, ticket 10 resolved)
+
+The killer is the multi-view observe<2 trim: 99.86% of the face cover wiped at iter 8000 (established points, mean opacity 0.74), never recovers. Screen-size prune acquitted (zero), opacity cull minor, resets non-lethal. Open seam: why 31k face points register <2 observations despite 19 constraining views. Fix is ticket 11, aimed at the named rule. Record: `PGSR/.scratch/lama-face-fill/issues/10-trace-prune-kill.md`; evidence `PGSR/artifacts/edge_10/` (eye: `cover_curve.png`).
 Picture: PGSR/artifacts/edge_04c/sidebyside_A31_1116.png | Fragments project onto the masked face region (LaMa left, control right) — right place
 Picture: PGSR/artifacts/edge_04d/A_lama_A31_1116_tri_0.png | Same points as shaded 3-D surface — scattered slivers, no face
 
