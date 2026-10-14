@@ -6,7 +6,8 @@
 
 **Blocked by:** none (all inputs exist: both post + raw meshes, sparse models, masks, training logs).
 
-**Status:** ready-for-agent
+**Status:** in-progress
+**Working in:** teammate t06-diagnoser, four audits cheapest-first (2026-10-14); mechanism proposal comes back for lead ruling
 
 - [ ] Cluster audit: re-run the post filter on ONE arm with retained-cluster sweeps (10 → 25 → all); does the sherd region survive as small clusters, or is there nothing coherent to keep? Renders of the sherd box per setting. Decides whether the deleter is the filter or the fusion.
 - [ ] Voxel sweep on a sherd crop: re-fuse ONLY the centroid neighbourhood at 0.002 / 0.001 / 0.0005 voxels (crop first — full-scene fine grids will OOM; the spec's tiling note applies); does a surface emerge at any step? Decides grid coarseness, with cost attached.
