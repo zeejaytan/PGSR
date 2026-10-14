@@ -20,6 +20,10 @@ Both arms trained to 30k iters and fused cleanly at the stock grid, but neither 
 Came back uninformative (2026-10-14). The photo gate passed, but the mesh stage produced no surface to measure in either version — fragments sit where the face should be without forming one. So none of the Done-when boxes could be ticked, and none is claimed. This retires no option and funds nothing: LaMa is neither in the capture chain nor ruled out; the next attempt needs a finer grid or different surfacing first, on an object this small and partly hidden. One sherd, one seed, one grid: a stopped trial, not a verdict on the method.
 Weight: one sherd (A31), one seed, both arms equally surfaceless at 0.75 mm grid.
 Next: finer-grid or re-surfacing pilot IF the conservator wants one — ticketed separately, never folded silently into this A/B.
+
+## Diagnosis update (2026-10-14, ticket 06 resolved)
+
+Failure mechanism named with pictures: upstream Gaussian starvation — training deposits ~zero cover at the face (3σ: A 35, B 0 of ~650k), so fusion integrates clamp/background depth into ≤32-tri confetti. Grid (0.002) and keep-10 filter acquitted; occlusion starvation ruled out (19/28 views constrain). Retry direction, if ever funded: face-targeted densification + retrain (~2h45 GPU/arm), NOT finer voxels or looser filtering. Record: `PGSR/.scratch/lama-face-fill/issues/06-diagnose-sherd-fusion-failure.md`; evidence `PGSR/artifacts/edge_06/`.
 Picture: PGSR/artifacts/edge_04c/sidebyside_A31_1116.png | Fragments project onto the masked face region (LaMa left, control right) — right place
 Picture: PGSR/artifacts/edge_04d/A_lama_A31_1116_tri_0.png | Same points as shaded 3-D surface — scattered slivers, no face
 
