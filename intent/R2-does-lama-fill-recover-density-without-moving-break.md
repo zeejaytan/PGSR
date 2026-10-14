@@ -35,6 +35,11 @@ Picture: PGSR/artifacts/edge_04d/A_lama_A31_1116_tri_0.png | Same points as shad
 
 The LaMa fill itself, set against the authors' showing: mask shape inside demonstrated territory (ours relatively narrower), resolution beyond it (3200 vs ≤512 quant / 1536 curve / ~2k claim), content unrepresented (plain wall vs rooms/faces) — and the big-lama weights we run were never quantitatively covered at any size (base quant is LaMa-Fourier). Ticket 02's "faithful, slightly softer" stands as observed with no author-backed generality. Calibration (Places365 val + author narrow mask + pinned predict.py) proposed, uncleared — needs the conservator (external download). Record: `PGSR/.scratch/lama-face-fill/issues/08-lama-author-fill-baseline.md`; evidence `PGSR/artifacts/edge_08/`.
 
+## Calibration update (2026-10-14, ticket 09 resolved)
+
+Ran as cleared: one Places365 hotel-lobby photo + author narrow mask (~30%) through the pinned fill. It completes structure properly — beams, railing, bottle continue with no breaks, slightly soft — gray 8.60 / rms 16.50 beside our plain-wall 5.51 / 6.98. Same order of magnitude on much harder content: the setup behaves as the authors' does. One image, so lead-grade, not proof — but the off-distribution worry is retired. Record: `PGSR/.scratch/lama-face-fill/issues/09-fill-calibration-run.md`; evidence `PGSR/artifacts/edge_09/` (eye: `side_by_side.png`).
+Picture: PGSR/artifacts/edge_09/side_by_side.png | Author-content calibration: masked lobby (left, red) vs pinned big-lama fill (right) — structure continues, no breaks
+
 ## Why it matters
 
 Masked training drains the clay (M5: 222,678 → 18,443 Gaussians, 2.6M → 276k verts) and fusion-time masking lands on a 0.75 mm grid (M8). The clamp covers face only, never the break, so a face fill cannot fake a join — but the open question is whether feeding LaMa-inpainted face pixels recovers density as clay or as smooth fake, and whether the break stays untouched. This decides if LaMa earns a place in the capture chain or stays a visualisation aid. GScream/InFusion are recorded backups, untested.
