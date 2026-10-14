@@ -4,12 +4,12 @@
 
 **Answers:** R2
 
-**Blocked by:** 04 (scoring — break stability, wall noise, flag-exclusion run).
+**Blocked by:** 04 — RESOLVED 2026-10-14 as honest negative (no scorable face in either arm; scoring refused). The eye step is reframed, not cancelled.
 
-**Needs-eye:** visual-qa pair to be staged in this ticket (rim/face close-ups A vs B at ridge-resolving scale); closes on witnessed look plus conservator note, never numbers alone.
+**Needs-eye:** the negative evidence staged in this ticket (side-by-side photo overlay showing fragments land on the masked face region + shaded 3D close-up showing scattered slivers, per arm); closes on witnessed look plus conservator note, never the lead's word alone.
 
-**Status:** ready-for-agent
+**Status:** ready-for-human
 
-- [ ] A-vs-B rim/face close-up pair staged in the viewer at a view resolving fine face texture, with generated vs measured shown differently
+- [ ] Negative-evidence pair witnessed by the conservator (overlay + sliver close-ups A vs B, in `artifacts/edge_04c/` + `artifacts/edge_04d/`), staged wherever the eye wants them
 - [ ] Conservator note recorded beside what it settled, with a same-round agent reply
-- [ ] R2 updated with the date: box ticked, amended, or retired — including "came back uninformative" if that is what happened
+- [ ] R2 updated with the date: box ticked, amended, or retired — "came back uninformative" is the lead's recommendation; the conservator's note decides

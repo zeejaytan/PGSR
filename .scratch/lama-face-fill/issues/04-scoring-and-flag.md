@@ -8,7 +8,11 @@
 
 **Lead note (read before starting):** 03's auto-crop close-ups missed the sherd (framed fusion-boundary tears at different spots per arm) — crop at the sherd's known 3D location from the photo masks/COLMAP frustums, and attach scale provenance (A03 373.733 mm/unit is assumed, unproven for A31) before any number counts. Gross fusion sanity confirmed; no face verdict stands yet.
 
-**Status:** in-progress
+**Status:** resolved
+
+## Answer
+
+HONEST NEGATIVE — method failed at the sherd, both arms equally (lead ruling 2026-10-14, eye on edge_04/04b/04c/04d renders): at the approved stock grid (0.002-unit voxels ≈ 0.75 mm), PGSR TSDF fusion yields NO coherent surface for the small partly-occluded A31 face in either arm. Chain: location verified twice (triangulated X in sherd-scale sparse blob; mask bbox encloses projections, track_true and masks agree) → post meshes have a HOLE at X both arms (10-cluster filter kept tray, dropped sherd) → raw meshes hold fragments at the right place (mask-interior verts project as a compact block on the masks) but they are scattered slivers in 3D (faces/verts ~0.47, eye-confirmed in 8 shaded orbits + 4 scatters). Measurement sound (cameras == COLMAP frame, residuals gated), reference sound (masks eye-passed). The three scored checkboxes (break arc, wall noise, flag-exclusion) are REFUSED on this geometry — numbers on fragment soup would be fabrication; the flag run never started for the same reason. The LaMa-vs-control question is unanswerable here through no fault of either arm: no scorable face exists in either. Scale note: A03 373.733 mm/unit stayed provisional throughout — unproven for A31, now moot for scoring. Next-hypothesis (not a claim): finer grid or different surfacing before any LaMa question can be answered on an object this small.
 **Working in:** teammate t04-scorer, phase 2b-prime-2 = mask-interior verts test (2026-10-14); numbers phase stays shut until lead clears it
 
 **Lead inspection of 2b-prime overlays (2026-10-14, eye on edge_04c/ side-by-sides):** plume overlaps the mask bbox with centroid inside in all 4 panels — track_true and masks agree, location stands (the brown triangle is a neighbouring sherd; A31's face is the occluded region behind the clamp in these views). NOT decisive: the 86 mm box swallows clamp + background, so "right neighbourhood" is proven but "face present/absent" is not. 2b-prime-2 ordered: shade + project ONLY mask-interior verts (~60%, ~3.2k/arm); coherent patch on the face region = scorable, still-slivers = name method-failed with this evidence.
@@ -95,3 +99,23 @@ Flat observations (descriptive only):
 - The red mask bbox encloses the middle of the plume; the yellow centroid cross sits inside the plume, above the clamp jaws.
 - The plume extends from the clamp level up into empty background; in the B_ctrl panels a second smaller cyan streak sits to the right of the main plume.
 - 100% of box verts land inside the photo frame in both views and both arms; ~60-62% land inside the mask bbox.
+
+## Worker work-notes (t04-scorer, phase 2b-prime-2, 2026-10-14)
+
+Task: mask-interior box verts only — shaded trisurf free-orbit (same 2 viewpoints) plus their photo projection, per arm x both views, then STOP. No scoring done.
+
+Job receipt (sapphire, CPU-only):
+- 32953297|pgsr-mpatch04d|COMPLETED|0:0|2026-10-14T15:58:27|2026-10-14T15:58:47 — first submit, no rerun. `--wrap` calling new `scripts/diag_maskpatch_04.py work/edge_04d` (readers copied exactly from the verified locate script; remote py_compile passed before submit).
+
+Script (new, uncommitted): `scripts/diag_maskpatch_04.py` (laptop source of truth, scp'd to Spartan). Same centroid+box as 2b-prime (rounded JSON values). Per arm x view: box verts projected through the shared sparse camera; kept = inside the track mask bbox; submesh = faces with all 3 verts kept; shaded trisurf at el=30/az=-60 and el=10/az=30 with 20 mm provisional bar; photo overlay of kept verts only at 0.4 scale with red mask bbox.
+
+Exact mask-interior counts (from `maskpatch.json`, identical to 2b-prime fractions):
+- A31_1116: A_lama 3180/5236 verts kept, 1498 faces; B_ctrl 2736/4443 verts kept, 1311 faces.
+- A31_1117: A_lama 3187/5236 verts kept, 1503 faces; B_ctrl 2664/4443 verts kept, 1279 faces.
+
+Staged files: cluster `work/edge_04d/` (`maskpatch.json` + 12 PNGs). Laptop `artifacts/edge_04d/` (NEW dir; earlier dirs untouched): `maskpatch.json`, per arm x view `{tri_0, tri_1, maskproj}.png` — PNGs + KB JSON only.
+
+Flat observations (descriptive only):
+- Maskproj overlays: the kept verts project as a compact cyan block that fills the red mask bbox in all four panels; the block sits over the clamp jaws and the dark region directly above them, with the brown triangular sherd to its left.
+- Trisurf free-orbits (all 8): the kept verts render as scattered shaded slivers spread through the cropped volume; faces/verts ratio ~0.47 in every panel (1498/3180, 1311/2736, 1503/3187, 1279/2664). No continuous patch surface is resolvable by eye in any of the eight views.
+- A_lama panels read as a diffuse spread through the volume; B_ctrl panels show a denser vertical streak near the top in the el=30/az=-60 viewpoint.
