@@ -9,9 +9,41 @@
 **Lead note (read before starting):** 03's auto-crop close-ups missed the sherd (framed fusion-boundary tears at different spots per arm) — crop at the sherd's known 3D location from the photo masks/COLMAP frustums, and attach scale provenance (A03 373.733 mm/unit is assumed, unproven for A31) before any number counts. Gross fusion sanity confirmed; no face verdict stands yet.
 
 **Status:** in-progress
-**Working in:** teammate t04-scorer, phase 1 = sherd location + matching renders (2026-10-14); scoring/flag phase 2 follows lead inspection
+**Working in:** teammate t04-scorer, phase 2a = shaded raw-mesh sherd renders (2026-10-14); scoring phase 2b gated on lead clearing those renders
+
+**Lead inspection of phase 1 (2026-10-14, eye on edge_04/ renders):** location ACCEPTED (X sits in a sherd-scale sparse blob, both arms). Post meshes UNSCORABLE at the sherd — eye-confirmed hole at X in both arms (white void in see_xz, larger in B): the 10-cluster filter kept tray background and dropped the sherd region in both arms. Raw meshes hold the sherd (21k/30k verts in box) but phase-1 scatters are unshaded clouds — no coherent face confirmable by eye yet. Curtain streaks are shared input-side structure (present in sparse too), not an arm difference. Consequence: ALL scoring moves to RAW meshes; phase 2a must deliver shaded-surface close-ups at tighter framing before any number is read.
 
 - [ ] Break-face arc agreement A−B in mm of arc on 2–3 sampled edges, far below erosion width; any break move recorded as contamination
 - [ ] Flat-wall noise A vs B as RMS residual in mm on quiet faces
 - [ ] Generated-vs-measured flag written in the PLY and proven honoured by a matcher run that demonstrably excludes flagged vertices (colour alone does not count)
 - [ ] Scale provenance attached (unscaled results refused, not measured); which of the three the outcome is named (method failed / measurement broken / reference wrong)
+
+## Worker work-notes (t04-scorer, 2026-10-14)
+
+Job receipts (sacct JobID|JobName|State|ExitCode|Start|End, all sapphire, CPU-only):
+- 32948403|pgsr-render-edge-04|COMPLETED|0:0|2026-10-14T14:52:20|2026-10-14T14:53:00 (locate+render, post meshes; new `slurm/pgsr_render_edge_04.slurm`)
+- 32948631|pgsr-diag04|COMPLETED|0:0|2026-10-14T15:00:14|2026-10-14T15:00:34 (frame diagnosis, --wrap)
+- 32948817|pgsr-void04|COMPLETED|0:0|2026-10-14T15:02:46|2026-10-14T15:02:58 (void probe, --wrap)
+- 32948969|pgsr-see04|COMPLETED|0:0|2026-10-14T15:07:56|2026-10-14T15:08:16 (side-view renders, --wrap)
+- 32949131|pgsr-raw04|COMPLETED|0:0|2026-10-14T15:11:41|2026-10-14T15:11:54 (raw-mesh box counts, --wrap)
+- 32949285|pgsr-rawrender04|COMPLETED|0:0|2026-10-14T15:15:05|2026-10-14T15:15:22 (locate+render, raw meshes, --wrap)
+- 32949602|pgsr-slab04|COMPLETED|0:0|2026-10-14T15:20:52|2026-10-14T15:21:07 (slab test, --wrap)
+- 32949894|pgsr-scat04|COMPLETED|0:0|2026-10-14T15:24:50|2026-10-14T15:25:05 (locate+render raw as scatter, --wrap)
+
+Step 1 deviation (no pull, nothing forced): Spartan repo is `HEAD (no branch)` detached with staged entries, which is the documented normal trial state (PGSR AGENTS.md: pull would move HEAD). `git pull --ff-only` is not applicable there, so no pull was attempted and nothing was moved. Laptop repo was clean (`main...origin/main`).
+
+Location method (one method, both arms): back-project A31-component bbox centres (mask-derived, `lama_trial/ticket03/face_survey/track_true.json`, native 5568x3712 divided by 1.74 to the 3200x2133 sparse frame) from the 7 face-visible views A31_1114-1120 through the shared 33-camera sparse model (PINHOLE 3200x2133, fx=6829.81/fy=6829.36/cx=1600/cy=1066.5), least-squares ray intersection. `images.bin` md5 is identical for both arms, so one triangulation serves both.
+
+Centroid (both arms, same numbers): scene units [-0.1812, 0.4883, -0.1933]; provisional mm [-67.7, 182.5, -72.2] (A03 373.733 scale, unproven for A31). Reprojection residuals px (s3200) [17.5, 8.9, 9.2, 17.8, 13.0, 10.0, 47.6], mean 17.7 (gate was 25; view 1120 is the largest at 47.6). Face width from triangulated depth ~0.109 units (~41 mm provisional); box = 0.400 units (~149 mm provisional, clamped floor of the 2.5x rule).
+
+Box size: 0.400 scene units (~149 mm provisional), same centroid/box/viewpoints for every render. Close-up viewpoints el=30/az=-60 and el=10/az=30; 50 mm provisional scale bar drawn on close-ups.
+
+Staged files (all new, uncommitted; laptop is source of truth, scp'd to Spartan): `scripts/locate_a31_render_04.py` (triangulate + render; later args: optional mesh filename; close-ups switched from shaded triangles to z-coloured scatter after the raw mesh proved too fragmented for shaded rendering), `scripts/diag_frame_04.py`, `scripts/diag_void_04.py`, `scripts/diag_see_04.py`, `scripts/diag_raw_04.py`, `scripts/diag_slab_04.py`, `slurm/pgsr_render_edge_04.slurm`. Cluster `work/edge_04/` (post-mesh renders + locate.json + diag side views) and `work/edge_04_raw/` (raw-mesh renders + locate.json; its diag/ subdir was removed by the scatter rerun — laptop copies kept). Laptop `artifacts/edge_04/`: `locate.json`, `A_lama/{closeup_0,closeup_1,context,see_xz,see_yz}.png`, `B_ctrl/{...same...}.png`, `raw/{locate.json, A_lama/{closeup_0,closeup_1,context,slab_xz}.png, B_ctrl/{...same...}.png}` — PNGs + KB JSON only. (Stray-dir incident: the first combined scp created `scripts/locate_a31_render_04.py/` as a directory on Spartan; fixed by moving the file up and removing the dir, verified by remote py_compile. Harness ssh_list/ssh_exec errored session-wide, so all cluster I/O went over laptop ssh/scp.)
+
+Flat observations (descriptive only):
+- Post meshes (`tsdf_fusion_post.ply`): 0 verts / 0 faces in the 0.4-unit box around the centroid in BOTH arms (5.13M / 5.88M verts total). Post close-ups show empty axes; context views show the red crop box inside the dense footprint.
+- Side-view scatters (post mesh blue, sparse red, X green star): the mesh forms a shell around a central void; the dense red sparse cluster (6640 sparse points within 0.2 units of X) and the star sit inside that void in both arms.
+- Frame check: train `cameras.json` position for A31_1100 equals the COLMAP centre to 4 decimals ([0.1911, -2.5298, -2.901]); the loader applies no world normalisation, so the mesh frame is the COLMAP frame.
+- Raw meshes (`tsdf_fusion.ply`): box holds A_lama 21,194 verts / 9,962 faces, B_ctrl 30,041 verts / 14,568 faces (raw totals 10.70M / 11.03M verts). The sherd region was fused, then removed by the post small-component filter.
+- Slab test (raw box content): z spans the full box floor to ceiling both arms (10-90% thickness ~115-118 mm provisional of the 149 mm box); x-z view shows three vertical curtain-like bands, the middle one centred near X.
+- Raw scatter close-ups (both viewpoints, both arms): a diffuse point cloud roughly filling the box; no clean face surface is resolvable by eye in these views. Raw faces/verts ratio ~0.5 (fragmented).
