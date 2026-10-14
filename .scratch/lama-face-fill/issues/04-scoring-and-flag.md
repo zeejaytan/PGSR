@@ -9,7 +9,9 @@
 **Lead note (read before starting):** 03's auto-crop close-ups missed the sherd (framed fusion-boundary tears at different spots per arm) — crop at the sherd's known 3D location from the photo masks/COLMAP frustums, and attach scale provenance (A03 373.733 mm/unit is assumed, unproven for A31) before any number counts. Gross fusion sanity confirmed; no face verdict stands yet.
 
 **Status:** in-progress
-**Working in:** teammate t04-scorer, phase 2b-prime = camera-view overlay diagnostic (2026-10-14); numbers phase stays shut until lead clears it
+**Working in:** teammate t04-scorer, phase 2b-prime-2 = mask-interior verts test (2026-10-14); numbers phase stays shut until lead clears it
+
+**Lead inspection of 2b-prime overlays (2026-10-14, eye on edge_04c/ side-by-sides):** plume overlaps the mask bbox with centroid inside in all 4 panels — track_true and masks agree, location stands (the brown triangle is a neighbouring sherd; A31's face is the occluded region behind the clamp in these views). NOT decisive: the 86 mm box swallows clamp + background, so "right neighbourhood" is proven but "face present/absent" is not. 2b-prime-2 ordered: shade + project ONLY mask-interior verts (~60%, ~3.2k/arm); coherent patch on the face region = scorable, still-slivers = name method-failed with this evidence.
 
 **Lead inspection of phase 2a (2026-10-14, eye on edge_04b/ shaded close-ups):** both arms show scattered slivers, no continuous face (faces/verts ~0.46: A 5235/2390, B 4442/2093 in the tight box) — worker's flat read eye-confirmed. 2b scoring NOT cleared: relief/arc numbers on fragment soup would be meaningless. Phase 2b-prime ordered instead: project raw-box verts through face-visible training cameras (e.g. A31_1116/1117) onto the photos, to decide whether the surface is genuinely absent (method failed) or badly viewed (measurement broken). Note for the record: the 0.75 mm fusion grid is ~4x coarser than the 0.2 mm ridge scale, so the ridge question is out of this grid's reach regardless.
 
@@ -70,3 +72,26 @@ Flat observations (descriptive only):
 - B_ctrl el=30/az=-60: fragments spread through the box with a denser vertical streak near the top-centre; el=10/az=30: fragments spread through the box with a denser patch toward the upper right.
 - Context views: the red 86 mm crop box sits at the same footprint position as the phase-1 box centre in both arms.
 - No clean face surface is resolvable by eye in any of the four shaded close-ups.
+
+## Worker work-notes (t04-scorer, phase 2b-prime, 2026-10-14)
+
+Task: diagnostic projection of raw-box verts through 2 training views' COLMAP cameras onto the photos, then STOP. No scoring done.
+
+Job receipts (sapphire, CPU-only):
+- 32951970|pgsr-proj04c|FAILED|1:0|2026-10-14T15:46:36|2026-10-14T15:46:46 — new script's images.bin reader treated the image name as length-prefixed; COLMAP stores it null-terminated, so the parse ran off-rails (MemoryError). My transcription error copying the reader; the working null-terminated version sits in `scripts/locate_a31_render_04.py` lines 60-78.
+- 32952360|pgsr-proj04c|COMPLETED|0:0|2026-10-14T15:50:57|2026-10-14T15:51:16 — rerun after replacing the reader with the exact working version (remote py_compile passed before submit).
+
+Script (new, uncommitted): `scripts/diag_project_04.py` (laptop source of truth, scp'd to Spartan). Reads centroid+box from `work/edge_04b/locate.json` (note: centroid re-read at the JSON's 4-decimal rounding, so box membership differs by 1 vert per arm from phase 2a: A 5236 vs 5235, B 4443 vs 4442; fractions unaffected at 3 decimals). Shared 33-camera sparse model, per-arm own photo dir (the two arms' JPGs are byte-different: LaMa-inpainted vs control). Views A31_1116.JPG + A31_1117.JPG. Overlays at 0.4 scale (1280x853 panels): cyan = projected in-photo box verts, red = track mask bbox (/1.74 into the 3200-frame), yellow cross = projected centroid.
+
+Staged files: cluster `work/edge_04c/` (`project.json` + 4 per-arm overlays + 2 side-by-sides). Laptop `artifacts/edge_04c/` (NEW dir; `edge_04/` + `edge_04b/` untouched): `project.json`, `A_lama/B_ctrl x 1116/1117 _overlay.png`, `sidebyside_A31_1116/1117.png` — PNGs + KB JSON only.
+
+Fractions (from `project.json`):
+- A31_1116: A_lama 5236 verts, 1.000 in photo, 0.607 in mask; B_ctrl 4443 verts, 1.000 in photo, 0.616 in mask.
+- A31_1117: A_lama 5236 verts, 1.000 in photo, 0.609 in mask; B_ctrl 4443 verts, 1.000 in photo, 0.600 in mask.
+
+Flat observations (descriptive only):
+- All four panels show the same rig: a horizontal bar of clamps, with the brown triangular sherd fragment held in a clamp left-of-centre.
+- The cyan projected verts form a tall vertical plume that sits over the clamp hardware and the dark background above/behind it; the brown sherd lies to the left of the plume's centre in all four panels.
+- The red mask bbox encloses the middle of the plume; the yellow centroid cross sits inside the plume, above the clamp jaws.
+- The plume extends from the clamp level up into empty background; in the B_ctrl panels a second smaller cyan streak sits to the right of the main plume.
+- 100% of box verts land inside the photo frame in both views and both arms; ~60-62% land inside the mask bbox.
