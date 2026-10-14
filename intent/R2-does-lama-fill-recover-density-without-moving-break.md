@@ -31,6 +31,10 @@ One level deeper: seeds (6,593 at the face) and gradients (face bbox highest-ene
 Picture: PGSR/artifacts/edge_04c/sidebyside_A31_1116.png | Fragments project onto the masked face region (LaMa left, control right) — right place
 Picture: PGSR/artifacts/edge_04d/A_lama_A31_1116_tri_0.png | Same points as shaded 3-D surface — scattered slivers, no face
 
+## Fill-baseline update (2026-10-14, ticket 08 resolved)
+
+The LaMa fill itself, set against the authors' showing: mask shape inside demonstrated territory (ours relatively narrower), resolution beyond it (3200 vs ≤512 quant / 1536 curve / ~2k claim), content unrepresented (plain wall vs rooms/faces) — and the big-lama weights we run were never quantitatively covered at any size (base quant is LaMa-Fourier). Ticket 02's "faithful, slightly softer" stands as observed with no author-backed generality. Calibration (Places365 val + author narrow mask + pinned predict.py) proposed, uncleared — needs the conservator (external download). Record: `PGSR/.scratch/lama-face-fill/issues/08-lama-author-fill-baseline.md`; evidence `PGSR/artifacts/edge_08/`.
+
 ## Why it matters
 
 Masked training drains the clay (M5: 222,678 → 18,443 Gaussians, 2.6M → 276k verts) and fusion-time masking lands on a 0.75 mm grid (M8). The clamp covers face only, never the break, so a face fill cannot fake a join — but the open question is whether feeding LaMa-inpainted face pixels recovers density as clay or as smooth fake, and whether the break stays untouched. This decides if LaMa earns a place in the capture chain or stays a visualisation aid. GScream/InFusion are recorded backups, untested.
