@@ -7,7 +7,7 @@
 **Blocked by:** none (paper texts + pinned repo + our logs exist).
 
 **Status:** in-progress
-**Working in:** teammate t07-baseliner, paper baseline + densification audit (2026-10-14); reason proposal returns for lead ruling
+**Working in:** teammate t07b-baseliner, paper baseline + densification audit (2026-10-14 retry; t07-baseliner died unresponsive with no report — rebuild reuses any verified leavings first)
 
 - [ ] Author baseline: via the `paper-reader` helper (`.claude/agents/`, plain texts in `C:\PR\papers\`), list what scenes/datasets the PGSR paper tests surface reconstruction on (with quotes + file/section, never a verdict from memory): scene scales, object sizes, any small/occluded/thin objects. Is there anything sherd-scale in their results?
 - [ ] Pinned-code densification audit: in the PGSR version we run, identify the densification/pruning parameters and rules (gradient thresholds, opacity resets, clone/split conditions) that decide where Gaussians grow and die. Quote file + line.
