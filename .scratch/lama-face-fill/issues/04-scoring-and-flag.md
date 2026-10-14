@@ -8,7 +8,8 @@
 
 **Lead note (read before starting):** 03's auto-crop close-ups missed the sherd (framed fusion-boundary tears at different spots per arm) — crop at the sherd's known 3D location from the photo masks/COLMAP frustums, and attach scale provenance (A03 373.733 mm/unit is assumed, unproven for A31) before any number counts. Gross fusion sanity confirmed; no face verdict stands yet.
 
-**Status:** ready-for-agent
+**Status:** in-progress
+**Working in:** teammate t04-scorer, phase 1 = sherd location + matching renders (2026-10-14); scoring/flag phase 2 follows lead inspection
 
 - [ ] Break-face arc agreement A−B in mm of arc on 2–3 sampled edges, far below erosion width; any break move recorded as contamination
 - [ ] Flat-wall noise A vs B as RMS residual in mm on quiet faces
