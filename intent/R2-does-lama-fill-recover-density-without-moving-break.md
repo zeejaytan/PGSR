@@ -24,6 +24,10 @@ Next: finer-grid or re-surfacing pilot IF the conservator wants one — ticketed
 ## Diagnosis update (2026-10-14, ticket 06 resolved)
 
 Failure mechanism named with pictures: upstream Gaussian starvation — training deposits ~zero cover at the face (3σ: A 35, B 0 of ~650k), so fusion integrates clamp/background depth into ≤32-tri confetti. Grid (0.002) and keep-10 filter acquitted; occlusion starvation ruled out (19/28 views constrain). Retry direction, if ever funded: face-targeted densification + retrain (~2h45 GPU/arm), NOT finer voxels or looser filtering. Record: `PGSR/.scratch/lama-face-fill/issues/06-diagnose-sherd-fusion-failure.md`; evidence `PGSR/artifacts/edge_06/`.
+
+## Reason update (2026-10-14, ticket 07 resolved)
+
+One level deeper: seeds (6,593 at the face) and gradients (face bbox highest-energy in frame) both present — yet cover gone by iter 30k. The clearing happens DURING training (iters 500–15k) by an unidentified prune rule; needs training-time traces (possible future ticket). Author baseline: DTU object scans nearest (same mm ruler); no clamp-held small-face case in the paper — "same ruler, harder case," a domain gap, not a defect in our run. Record: `PGSR/.scratch/lama-face-fill/issues/07-why-starvation-author-baseline.md`; evidence `PGSR/artifacts/edge_07/`.
 Picture: PGSR/artifacts/edge_04c/sidebyside_A31_1116.png | Fragments project onto the masked face region (LaMa left, control right) — right place
 Picture: PGSR/artifacts/edge_04d/A_lama_A31_1116_tri_0.png | Same points as shaded 3-D surface — scattered slivers, no face
 
