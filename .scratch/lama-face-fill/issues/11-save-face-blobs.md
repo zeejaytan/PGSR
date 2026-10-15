@@ -6,15 +6,18 @@
 
 **Blocked by:** none (conservator chose diagnose-then-fix 2026-10-15).
 
-**Status:** in-progress
-**Working in:** teammate t11-saver, phase B reseed retrain on B_ctrl (2026-10-15); surface check returns for lead ruling
+**Status:** resolved
+
+## Answer (lead ruling 2026-10-16, reseed curve eyed — RESEED FAILED)
+
+Replanting 6,593 measured face seeds at iter 8001 did not stick: cover held to iter 9000, then the iter-9000/10000 trims removed all of them (0 in box at 30k) — same rule, not a new failure. The foregone confirmatory fusion was cancelled (a mesh of an empty box teaches nothing). Standing result: face points never count as seen by the face-view cameras (dim, small — hidden behind existing geometry), so no planting strategy survives this trimmer. Remaining options, untried: (1) face-box trim exemption (protects whatever is there, junk or not), (2) find why face cameras don't count face points (rasterizer visibility), (3) different surfacing. None funded yet.
 
 **Gate pick (lead, 2026-10-15, overlay + chart eyed):** NOT steel-blocked — 1101–1105 zero steel-on-face, priority views ≥98% clear, yet the global wipe still took 99.86%. The blobs sank inside. Exemption parked; reseed picked: re-plant at the 6,593 measured SfM face-seed positions right after the iter-8000 wipe, continue to 30k, re-fuse stock grid, render the box. One arm (B_ctrl) proves mechanism; A/B comparison waits for a surface in at least one arm.
 
-- [ ] Phase A — steel-vs-sunk (CPU only): project the ticket-10 face-box region through the train cameras view by view; for each view, is clamp steel in front of the face surface (use masks + rendered depths from the ticket-03 scenes)? Report per-view front-blocked fractions + pictured overlays. Verdict reserved to the lead: STOP after staging and report.
-- [ ] GATE: lead picks the matched fix — (1) face-box exemption from the trim if steel-blocked, (2) post-wipe reseed + continued training if sunk-inside, (3) rule relaxation only if the evidence forces it. No GPU retrain starts before the pick.
-- [ ] Phase B — intervene per the pick (GPU retrain, one arm first): copy-trainer discipline (never edit pinned files), same seed/config as ticket 03, new out dir, polled, sacct recorded. Then re-fuse at the stock grid and render the face box: does a surface exist now?
-- [ ] Restraint: no LaMa-vs-control claim until a surface exists in at least one arm; small files to `artifacts/edge_11/`; work-notes only, never commits.
+- [x] Phase A — steel-vs-sunk (CPU only): NOT steel — five views zero occlusion, priority ≥98% clear. Blobs sank inside.
+- [x] GATE: reseed picked (sunk-inside); exemption parked; relaxation not forced.
+- [x] Phase B — reseed retrain on B_ctrl (33039064 COMPLETED 0:0): seeds held to 9000, trims took all by 10000; confirmatory fusion cancelled as foregone. No surface.
+- [x] Restraint: no LaMa-vs-control claim; smalls in `artifacts/edge_11/`; work-notes only, never commits.
 
 **Rules carried over:** renders before numbers; mm provisional; heavy compute on Spartan only.
 
@@ -71,3 +74,35 @@ Deviations/limits: (1) pinned-repo `pull --ff-only` NOT run — the checkout car
 Gate options restated (lead picks; no proposal here): (1) face-box exemption from the trim if steel-blocked; (2) post-wipe reseed + continued training if sunk-inside; (3) rule relaxation only if the evidence forces it.
 
 STOPPED after staging — zero fix work, no retrain started.
+
+## Worker work-notes (t11-saver, 2026-10-15/16 — PHASE B reseed, staged, STOPPED for ruling)
+
+Job receipts (sacct JobID|JobName|State|ExitCode|Start|End):
+- 33038536|stage_seeds_11|COMPLETED|0:0 (sapphire CPU; staged 6,593 face seeds from the sparse cloud — exact ticket-07 match; ticket-03's 49396 was a typo for 49936)
+- 33039064|pgsr-reseed11|COMPLETED|0:0|2026-10-15T16:49|2026-10-15T19:26 (~2h36 on gpu-a100; B_ctrl recipe + iter-8001 injection, out `work/edge_11/B_ctrl_reseed`)
+- 33106306|pgsr-cover11|COMPLETED|0:0 (sapphire CPU; cover check, seconds)
+- 33106307|pgsr-fuse-reseed11|PENDING at write time (gpu-a100; stock-grid re-fusion queued — mesh verdict follows)
+Laptop-side poll on every submit. Never committed/pushed.
+
+Method (copy-trainer discipline — pinned repo files untouched; NEW uncommitted files: `scripts/reseed11/` = trace10-pattern copy with `reseed_face()` + iter-8001 hook + `RESEED11_SEEDS` preload, `slurm/pgsr_train_reseed11.slurm`, `scripts/stage_face_seeds_11.py`, `scripts/diag_cover_11.py`, `slurm/pgsr_cover11.slurm`, `slurm/pgsr_fuse_reseed11.slurm`; cluster copies under `work/edge_11/`):
+- Seeds = 6,593 sparse points inside the face box, per-seed scale log(NN dist), identity rots, opacity init 0.1 — injected via the same `densification_postfix` path as a stock densify step, right after the iter-8000 observe trim, then training continued stock to 30k (seed 22, same config as ticket-03 B_ctrl).
+- Re-fusion replicates ticket-03 exactly (stock render.py, full-res, voxel 0.002, 10 clusters, --skip_test, iter 30000) on the reseed model dir.
+
+Reseed marker + kill curve (`B_ctrl_reseed/reseed11_kills.jsonl`, 163 rows; chart `artifacts/edge_11/cover_curve.png`, eyed):
+- Iter 8000 trim: face 25,938 before -> 25,764 removed (99.3%) — the wipe reproduced in the reseed run itself.
+- Iter 8001 reseed: 6,593 injected, face_after 6,767 (174 survivors + seeds). Iter 9000: face 6,592, all present.
+- Iter 9000 trim: 6,589 of 6,592 removed (removed_mean_opacity 0.31, footprint 0.0018). Iter 10000 trim: remaining 6 removed. Face 0 from iter 11000 on; 30k cloud: 0 in box of 627,429 total, 5 within 3fp (frac_of_seeds 0.0).
+- The 770-byte face_iter15000.npz is explained (empty face set), not a write bug.
+
+Flat observations (no verdict — numbers for the lead's ruling):
+- The seeds survived exactly one trim interval (~1k iters, still present at 9000) and were removed by the very next observe<2 trim — the same rule that killed the originals, not a new failure mode.
+- Removed seeds were dim (opacity 0.31) and small (fp 0.0018): consistent with gaussians the face-view cameras never saw as front-visible — i.e. hidden behind existing geometry along those rays — but that mechanism is an inference, not a measurement; the measured fact is observe<2 for all 6,589 within 1k iters of planting.
+- With 0 face gaussians at 30k, the pending stock fusion is expected to show a void at the box — mesh confirmation to follow when 33106307 runs.
+
+Files staged (NEW names in `artifacts/edge_11/`, small files only): `cover.json` (curve + snaps + final counts), `cover_curve.png` (eyed). Cluster originals: `work/edge_11/` (kills log, snaps, seeds npz, model dir).
+
+Deviations/limits: (1) pinned-repo `pull --ff-only` NOT run (pre-existing local mods, same as phase A). (2) No LaMa-vs-control claim; mm provisional. (3) Fusion + shaded box render outstanding on GPU queue at write time.
+
+STOPPED — cover verdict staged, mesh evidence pending, no further compute started.
+
+Closing (t11-saver, 2026-10-16, lead ruling: reseed FAILED): fusion job 33106307 CANCELLED by scancel (sacct CANCELLED) — point-cloud evidence sufficient (0/627,429 in box at 30k); a mesh of an empty box would show a void and teach nothing. Final cover: 6,593 seeds in at 8001, 6,592 present at 9000, 0 from 11000 on, 5 within 3fp at 30k. Standing down; ticket resolution and next move are the lead's.

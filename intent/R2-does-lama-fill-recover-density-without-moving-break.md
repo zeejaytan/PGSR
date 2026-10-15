@@ -32,6 +32,10 @@ One level deeper: seeds (6,593 at the face) and gradients (face bbox highest-ene
 ## Trace update (2026-10-15, ticket 10 resolved)
 
 The killer is the multi-view observe<2 trim: 99.86% of the face cover wiped at iter 8000 (established points, mean opacity 0.74), never recovers. Screen-size prune acquitted (zero), opacity cull minor, resets non-lethal. Open seam: why 31k face points register <2 observations despite 19 constraining views. Fix is ticket 11, aimed at the named rule. Record: `PGSR/.scratch/lama-face-fill/issues/10-trace-prune-kill.md`; evidence `PGSR/artifacts/edge_10/` (eye: `cover_curve.png`).
+
+## Reseed update (2026-10-16, ticket 11 resolved — RESEED FAILED)
+
+Not steel (five views zero occlusion, priority ≥98% clear) — the blobs sank inside, so replanting 6,593 measured seeds post-wipe was tried: held to iter 9000, all taken by iter 10000, 0 in box at 30k. Same rule, not a new failure; confirmatory fusion cancelled as foregone. Standing result: no planting strategy survives this trimmer — face points never count as seen. Remaining: trim exemption, visibility-why, or different surfacing; none funded. Record: `PGSR/.scratch/lama-face-fill/issues/11-save-face-blobs.md`; evidence `PGSR/artifacts/edge_11/` (eye: `cover_curve.png`).
 Picture: PGSR/artifacts/edge_04c/sidebyside_A31_1116.png | Fragments project onto the masked face region (LaMa left, control right) — right place
 Picture: PGSR/artifacts/edge_04d/A_lama_A31_1116_tri_0.png | Same points as shaded 3-D surface — scattered slivers, no face
 
