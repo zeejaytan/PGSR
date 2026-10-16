@@ -68,6 +68,10 @@ Masked training drains the clay (M5: 222,678 → 18,443 Gaussians, 2.6M → 276k
 - Density recovers as clay with break untouched and flag honoured → keep, and only then scope the second sherd and the GScream/InFusion comparison.
 - Training-time taint rule: pixels grown from fake texture are inferred everywhere they constrain — if the flag cannot be honoured downstream, the dense mesh is not a record mesh regardless of counts.
 
+## Verdict (2026-10-16, spec closed by user — STOPPED, not passed)
+
+The reconstruction step failed on this material; the fill step was never judged. PGSR's training clears small half-hidden faces (observe<2 trim wipes 99.86% of face cover at iter 8000; reseeded replanting held to iter 9,000, gone by 10,000 — ticket 11). Both arms fused surfaceless, so no Done-when box above was ever ticked. LaMa is acquitted of the failure (control arm fails identically with no LaMa involved) and unjudged on its own question. Type 1 (method on this material), one sherd, one seed, one grid. The open question moves to MILo as M10; no second seed, no finer grid, no GScream/InFusion on this spec.
+
 ## Source
 
 User proposal 2026-10-05 (LaMa trial, GScream/InFusion as candidates; issue is general coarseness, not just clamp); M5 verdict 2026-09-06 (density collapse); M8 verdict 2026-09-13 (grid ceiling); U14 (labelled completion); R1 control figures (PGSR-A 96,719 verts, 0.77 mm median edge).

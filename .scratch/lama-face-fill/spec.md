@@ -74,3 +74,9 @@ Run one small A/B and stop there: one sherd, one seed, same views — arm A trai
 - Answers R2; triage state for the tickets is ready-for-agent once cut. Vocabulary follows the glossary: relief is Ra/Rq height in mm after the break's own meander is filtered out with cutoff stated; point spacing is the step size of the measurement, never a bump height.
 - Sources: M5 verdict 2026-09-06 (222,678 → 18,443 Gaussians, 276k vs 2.6M verts); M8 verdict 2026-09-13 (0.75 mm grid, variant B OOM); R1 control (PGSR-A 96,719 verts, 0.77 mm median edge); U14 (labelled completion gate); LaMa repo (full-res fully-convolutional inpainting) + Marigold/MiDaS-style aligned depth as the fusion companion, exact pins at ticket time.
 - Next step is the ticket breakdown below, then the link gate.
+
+## Close (2026-10-16, user decision)
+
+Closed with the trial stopped, not passed. Final ruling: **the reconstruction step failed on this material; the fill step was never judged.** PGSR's training clears small half-hidden faces by an unidentified prune rule (seeds and gradients present, cover gone by iter 30k; a reseeded save-the-face run held to iter 9,000 and lost everything by 10,000 — foreground retry refused). Both arms fused surfaceless, so no Done-when box was ever ticked. LaMa is acquitted of the failure (control arm, no LaMa involved, fails identically) and unjudged on its own question (no surface existed to measure the fill against). This is a claim about the method on this material (type 1), at one sherd, one seed, one grid.
+
+What transfers: LaMa pin (`advimman/lama@786f593`, big-lama weights, ticket 01), the narrow-band mask construction (ticket 02), the calibration numbers (ticket 09: structured scenes complete, our gray 5.5/rms 6.9). The open question moves to MILo as M10 — full scenes succeed there, so the fill gets a reconstruction step that can hold a face. No second seed, no finer grid, no GScream/InFusion on this spec.
