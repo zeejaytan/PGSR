@@ -15,3 +15,6 @@ artifacts/
 
 # Python bytecode cache.
 __pycache__/
+
+# macOS Finder metadata (8 were tracked from the upstream import; untracked 2026-10-24).
+.DS_Store

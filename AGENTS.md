@@ -20,7 +20,7 @@ resolution a break face needs?). New questions opened here take prefix **`R`**.
 |------|--------|
 | GitHub fork (`origin`) | `zeejaytan/PGSR` |
 | Upstream | `zju3dv/PGSR` (read-only) plus the community masked-fusion construction, pinned per ticket |
-| Spartan checkout (`REMOTE_ROOT`) | `/data/gpfs/projects/punim2657/PGSR/repo` — detached at the pinned stock commit for trials; slurm tooling enters via `git fetch origin main` + `git checkout origin/main -- slurm scripts`, never a pull that moves HEAD |
+| Spartan checkout (`REMOTE_ROOT`) | `/data/gpfs/projects/punim2657/PGSR/repo` — canonical and **fetch-only** (`git fetch origin` only; nothing checked out over it, no worktrees). Our `main` descends from the stock pin, so `origin` holds both commits. A run uses **two commits, both recorded**: the tooling commit (ours: `slurm/`, `scripts/`), which names the run, and the stock commit pinned in that commit's `slurm/stock_pin.txt`. The job unpacks both beside each other (`run_from_commit.sh`, then `slurm/lib/stock_beside.sh`) and writes both into `<run>/source.txt`. Submit from the login node: `git -C $R fetch origin && git -C $R show $SHA:slurm/<job>.slurm > $TMPDIR/job.slurm && new_run.sh /data/gpfs/projects/punim2657/PGSR $R $SHA <tag> $TMPDIR/job.slurm stock=$(git -C $R show $SHA:slurm/stock_pin.txt)`. Jobs written before 2026-10-24 still `cd` into this checkout; convert one to the pattern of `slurm/pgsr_two_commit_smoke.slurm` before its next use |
 | Spartan working area (untracked) | `/data/gpfs/projects/punim2657/PGSR/` — holds `data/`, `output/`, `logs/` |
 | Compute env (reuse-first) | the existing MILo conda env, which carries everything except the plane rasterizer. One additive build (`slurm/pgsr_build_ext.slurm`) compiles `diff-plane-rasterization` into it; no fresh env |
 | SSH | `Host spartan`, user `zhuojiat` |
@@ -29,7 +29,7 @@ resolution a break face needs?). New questions opened here take prefix **`R`**.
 Default branch is **`main`** (align with the upstream default at fork time if it differs).
 Local rsync landing zone: `artifacts/` — comparison renders, metrics and logs only.
 
-Workbench layout, and the harvest-then-delete procedure that goes with it: `../docs/agents/workspace-hygiene.md`. Deletion follows `../AGENTS.md` rule 13. Canonical checkout `/data/gpfs/projects/punim2657/PGSR/repo`, working area `/data/gpfs/projects/punim2657/PGSR/`; `runs/` + `attic/` not yet set up.
+Workbench layout, and the harvest-then-delete procedure that goes with it: `../docs/agents/workspace-hygiene.md`. Deletion follows `../AGENTS.md` rule 13. Canonical checkout `/data/gpfs/projects/punim2657/PGSR/repo`, working area `/data/gpfs/projects/punim2657/PGSR/`; `runs/` (with `index.tsv`) + `attic/` set up 2026-10-24.
 
 ## Write rules
 
