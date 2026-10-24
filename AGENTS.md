@@ -29,6 +29,8 @@ resolution a break face needs?). New questions opened here take prefix **`R`**.
 Default branch is **`main`** (align with the upstream default at fork time if it differs).
 Local rsync landing zone: `artifacts/` — comparison renders, metrics and logs only.
 
+Workbench layout, and the harvest-then-delete procedure that goes with it: `C:\PR\docs\agents\workspace-hygiene.md`. Deletion follows `C:\PR\AGENTS.md` rule 13. Canonical checkout `/data/gpfs/projects/punim2657/PGSR/repo`, working area `/data/gpfs/projects/punim2657/PGSR/`; `runs/` + `attic/` not yet set up.
+
 ## Write rules
 
 Analysis/build code → `scripts/`; versioned Slurm → `slurm/`; method notes → `docs/notes/`;
