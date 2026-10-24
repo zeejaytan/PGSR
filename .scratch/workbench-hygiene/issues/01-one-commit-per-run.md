@@ -6,15 +6,14 @@
 
 **Blocked by:** None (can start immediately).
 
-**Status:** in-progress
-**Working in:** project thread "PGSR one commit per run" (2026-10-24)
+**Status:** resolved
 
 Amendment 4.3. Today the Spartan checkout is detached at the stock commit with `slurm/` and `scripts/` checked out from main on top (`AGENTS.md`, Paths). Also untrack the 8 `.DS_Store` files (amendment 2.4).
 
-- [ ] One job run this way records both commits in its run directory
-- [ ] Canonical checkout back to fetch-only and clean
-- [ ] `.DS_Store` untracked and ignored
-- [ ] `AGENTS.md` Paths row rewritten
+- [x] One job run this way records both commits in its run directory
+- [x] Canonical checkout back to fetch-only and clean
+- [x] `.DS_Store` untracked and ignored
+- [x] `AGENTS.md` Paths row rewritten
 
 ## Progress 2026-10-24
 
